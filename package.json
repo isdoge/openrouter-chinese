@@ -1,0 +1,15 @@
+{
+  "name": "openrouter-chinese",
+  "version": "0.1.2",
+  "type": "module",
+  "description": "Tampermonkey userscript for Chinese localization of OpenRouter workspaces and settings pages",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/isdoge/openrouter-chinese.git"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node scripts/check.mjs"
+  }
+}
