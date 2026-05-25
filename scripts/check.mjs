@@ -8,8 +8,8 @@ import { fileURLToPath } from "node:url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, "..");
-const source = path.join(rootDir, "src", "openrouter-workspaces-zh.user.js");
-const output = path.join(rootDir, "dist", "openrouter-workspaces-zh.user.js");
+const source = path.join(rootDir, "src", "openrouter-chinese.user.js");
+const output = path.join(rootDir, "dist", "openrouter-chinese.user.js");
 
 const syntax = spawnSync(process.execPath, ["--check", source], {
   cwd: rootDir,
@@ -168,7 +168,7 @@ function loadTranslator(code) {
   context.globalThis = context;
 
   vm.runInNewContext(code, context, {
-    filename: "openrouter-workspaces-zh.user.js",
+    filename: "openrouter-chinese.user.js",
   });
 
   assert.equal(typeof context.__openrouterWorkspacesZh?.translate, "function");

@@ -19,7 +19,7 @@ const contentTypes = new Map([
 const server = createServer(async (request, response) => {
   const url = new URL(request.url || "/", `http://${request.headers.host}`);
   const decodedPath = decodeURIComponent(url.pathname.replace(/^\/+/, ""));
-  const filePath = path.resolve(rootDir, decodedPath || "dist/openrouter-workspaces-zh.user.js");
+  const filePath = path.resolve(rootDir, decodedPath || "dist/openrouter-chinese.user.js");
 
   response.setHeader("Access-Control-Allow-Origin", "*");
   response.setHeader("Access-Control-Allow-Methods", "GET, HEAD, OPTIONS");

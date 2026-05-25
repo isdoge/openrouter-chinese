@@ -1,14 +1,14 @@
 // ==UserScript==
 // @name         OpenRouter Workspaces Chinese
-// @namespace    https://github.com/isdoge/openrouter-workspaces-zh
+// @namespace    https://github.com/isdoge/openrouter-chinese
 // @version      0.1.2
 // @description  Chinese localization for OpenRouter workspaces, account settings, menus, dialogs, and common overlays.
 // @author       codex
 // @license      MIT
-// @homepageURL  https://github.com/isdoge/openrouter-workspaces-zh
-// @supportURL   https://github.com/isdoge/openrouter-workspaces-zh/issues
-// @downloadURL  https://raw.githubusercontent.com/isdoge/openrouter-workspaces-zh/main/dist/openrouter-workspaces-zh.user.js
-// @updateURL    https://raw.githubusercontent.com/isdoge/openrouter-workspaces-zh/main/dist/openrouter-workspaces-zh.user.js
+// @homepageURL  https://github.com/isdoge/openrouter-chinese
+// @supportURL   https://github.com/isdoge/openrouter-chinese/issues
+// @downloadURL  https://raw.githubusercontent.com/isdoge/openrouter-chinese/main/dist/openrouter-chinese.user.js
+// @updateURL    https://raw.githubusercontent.com/isdoge/openrouter-chinese/main/dist/openrouter-chinese.user.js
 // @match        https://openrouter.ai/workspaces*
 // @match        https://openrouter.ai/workspaces/*
 // @match        https://openrouter.ai/settings/*
@@ -27,7 +27,7 @@
 (function () {
   "use strict";
 
-  const SCRIPT_NAME = "openrouter-workspaces-zh";
+  const SCRIPT_NAME = "openrouter-chinese";
   const INITIAL_RUN_DELAY_MS = 1200;
   const ATTRIBUTES = [
     "aria-label",
