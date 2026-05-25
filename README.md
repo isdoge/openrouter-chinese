@@ -27,7 +27,17 @@ OpenRouter 工作区、排行榜、模型、聊天和账号设置页面的简体
 
 ## 截图
 
-> 截图待补充：请在登录后的 OpenRouter 页面截图，放入 `docs/` 目录。
+| 工作区 | 设置 |
+| --- | --- |
+| <img src="docs/workspaces.webp" alt="OpenRouter 工作区" width="100%"> | <img src="docs/settings.webp" alt="OpenRouter 设置" width="100%"> |
+
+| 模型 | 应用 |
+| --- | --- |
+| <img src="docs/models.webp" alt="OpenRouter 模型页" width="100%"> | <img src="docs/apps.webp" alt="OpenRouter 应用页" width="100%"> |
+
+| 排行榜 |  |
+| --- | --- |
+| <img src="docs/rankings.webp" alt="OpenRouter 排行榜" width="100%"> |  |
 
 ## 安装
 
