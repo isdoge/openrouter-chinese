@@ -2,9 +2,9 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Tampermonkey](https://img.shields.io/badge/Tampermonkey-√-green.svg)](https://www.tampermonkey.net/)
 
-# OpenRouter Workspaces 中文
+# OpenRouter 中文化插件
 
-OpenRouter 工作区、排行榜、模型、聊天和账号设置页面的简体中文翻译脚本。
+OpenRouter 首页、工作区、排行榜、模型、聊天和账号设置页面的简体中文翻译脚本。
 
 [安装脚本](https://raw.githubusercontent.com/isdoge/openrouter-chinese/main/dist/openrouter-chinese.user.js)
 ｜
@@ -14,7 +14,7 @@ OpenRouter 工作区、排行榜、模型、聊天和账号设置页面的简体
 
 ## 功能
 
-- 翻译 OpenRouter 工作区、排行榜、模型、聊天、Fusion、Labs、Apps 等页面的常见文案
+- 翻译 OpenRouter 首页、工作区、排行榜、模型、聊天、Fusion、Labs、Apps 等页面的常见文案
 - 覆盖按钮、表格、输入框占位、下拉菜单、提示浮层和模态框
 - 兼容 React 动态渲染：路由切换、弹层打开和异步内容加载后自动重翻译
 - 避免误翻模型 ID、URL、邮箱和 API Key
@@ -27,17 +27,17 @@ OpenRouter 工作区、排行榜、模型、聊天和账号设置页面的简体
 
 ## 截图
 
-| 工作区 | 设置 |
+| 首页 | 工作区 |
 | --- | --- |
-| <img src="docs/workspaces.webp" alt="OpenRouter 工作区" width="100%"> | <img src="docs/settings.webp" alt="OpenRouter 设置" width="100%"> |
+| <img src="docs/home.webp" alt="OpenRouter 首页" width="100%"> | <img src="docs/workspaces.webp" alt="OpenRouter 工作区" width="100%"> |
 
-| 模型 | 应用 |
+| 设置 | 模型 |
 | --- | --- |
-| <img src="docs/models.webp" alt="OpenRouter 模型页" width="100%"> | <img src="docs/apps.webp" alt="OpenRouter 应用页" width="100%"> |
+| <img src="docs/settings.webp" alt="OpenRouter 设置" width="100%"> | <img src="docs/models.webp" alt="OpenRouter 模型页" width="100%"> |
 
-| 排行榜 |  |
+| 应用 | 排行榜 |
 | --- | --- |
-| <img src="docs/rankings.webp" alt="OpenRouter 排行榜" width="100%"> |  |
+| <img src="docs/apps.webp" alt="OpenRouter 应用页" width="100%"> | <img src="docs/rankings.webp" alt="OpenRouter 排行榜" width="100%"> |
 
 ## 安装
 
@@ -56,18 +56,7 @@ https://raw.githubusercontent.com/isdoge/openrouter-chinese/main/dist/openrouter
 
 ### 3. 刷新页面使用
 
-脚本匹配范围：
-
-- `https://openrouter.ai/workspaces*`
-- `https://openrouter.ai/settings/*`
-- `https://openrouter.ai/activity*`
-- `https://openrouter.ai/logs*`
-- `https://openrouter.ai/labs*`
-- `https://openrouter.ai/apps*`
-- `https://openrouter.ai/rankings*`
-- `https://openrouter.ai/chat*`
-- `https://openrouter.ai/fusion*`
-- `https://openrouter.ai/models*`
+脚本元数据使用 `https://openrouter.ai/*`，运行时仅在首页、`workspaces`、`settings`、`activity`、`logs`、`labs`、`apps`、`rankings`、`chat`、`fusion`、`models` 这些路径生效。
 
 ## 目录
 

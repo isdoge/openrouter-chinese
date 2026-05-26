@@ -1,6 +1,6 @@
 {
   "name": "openrouter-chinese",
-  "version": "0.1.2",
+  "version": "0.1.8",
   "type": "module",
   "description": "Tampermonkey userscript for Chinese localization of OpenRouter workspaces and settings pages",
   "license": "MIT",

@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         OpenRouter Workspaces Chinese
+// @name         OpenRouter 中文化插件
 // @namespace    https://github.com/isdoge/openrouter-chinese
-// @version      0.1.2
+// @version      0.1.8
 // @description  Chinese localization for OpenRouter workspaces, account settings, menus, dialogs, and common overlays.
 // @author       codex
 // @license      MIT
@@ -9,17 +9,7 @@
 // @supportURL   https://github.com/isdoge/openrouter-chinese/issues
 // @downloadURL  https://raw.githubusercontent.com/isdoge/openrouter-chinese/main/dist/openrouter-chinese.user.js
 // @updateURL    https://raw.githubusercontent.com/isdoge/openrouter-chinese/main/dist/openrouter-chinese.user.js
-// @match        https://openrouter.ai/workspaces*
-// @match        https://openrouter.ai/workspaces/*
-// @match        https://openrouter.ai/settings/*
-// @match        https://openrouter.ai/activity*
-// @match        https://openrouter.ai/logs*
-// @match        https://openrouter.ai/labs*
-// @match        https://openrouter.ai/apps*
-// @match        https://openrouter.ai/rankings*
-// @match        https://openrouter.ai/chat*
-// @match        https://openrouter.ai/fusion*
-// @match        https://openrouter.ai/models*
+// @match        https://openrouter.ai/*
 // @grant        none
 // @run-at       document-idle
 // ==/UserScript==
@@ -29,6 +19,18 @@
 
   const SCRIPT_NAME = "openrouter-chinese";
   const INITIAL_RUN_DELAY_MS = 1200;
+  const ALLOWED_PATH_PREFIXES = [
+    "/workspaces",
+    "/settings",
+    "/activity",
+    "/logs",
+    "/labs",
+    "/apps",
+    "/rankings",
+    "/chat",
+    "/fusion",
+    "/models",
+  ];
   const ATTRIBUTES = [
     "aria-label",
     "title",
@@ -51,6 +53,7 @@
     ["Search by name...", "按名称搜索..."],
     ["Open navigation menu", "打开导航菜单"],
     ["OpenRouter", "OpenRouter"],
+    ["Logo OpenRouter", "OpenRouter 徽标"],
     ["Home", "首页"],
     ["Models", "模型"],
     ["Fusion", "融合"],
@@ -59,6 +62,8 @@
     ["Apps", "应用"],
     ["Docs", "文档"],
     ["Personal", "个人"],
+    ["Personal Personal", "个人"],
+    ["Personal 个人", "个人"],
     ["Default Workspace", "默认工作区"],
     ["Workspace", "工作区"],
     ["Workspaces", "工作区"],
@@ -68,11 +73,13 @@
     ["Activity", "活动"],
     ["Logs", "日志"],
     ["Credits", "余额"],
+    ["Get API Key", "获取 API 密钥"],
     ["Management Keys", "管理密钥"],
     ["Privacy", "隐私"],
     ["Preferences", "偏好设置"],
     ["Settings", "设置"],
     ["API Keys", "API 密钥"],
+    ["API Key", "API 密钥"],
     ["Create and manage your API keys.", "创建并管理你的 API 密钥。"],
     ["New Key", "新建密钥"],
     ["Key", "密钥"],
@@ -87,6 +94,7 @@
     ["Usage", "用量"],
     ["Limit", "限额"],
     ["TOTAL", "总计"],
+    ["Total", "总计"],
     ["Never", "从未"],
     ["Free", "免费"],
     ["free", "免费"],
@@ -99,6 +107,7 @@
     ["Edit", "编辑"],
     ["Rename", "重命名"],
     ["Delete", "删除"],
+    ["Delete Key", "删除密钥"],
     ["Remove", "移除"],
     ["Cancel", "取消"],
     ["Close", "关闭"],
@@ -127,9 +136,15 @@
     ["Updated", "更新时间"],
     ["Status", "状态"],
     ["Type", "类型"],
+    ["Monthly Tokens", "月度 Token"],
+    ["Global Users", "全球用户"],
     ["Provider", "提供商"],
     ["Model", "模型"],
     ["Models", "模型"],
+    ["by", "由"],
+    ["active models on", "个活跃模型，来自"],
+    ["providers", "个提供商"],
+    ["Weekly Trend", "周趋势"],
     ["All", "全部"],
     ["None", "无"],
     ["Default", "默认"],
@@ -150,6 +165,7 @@
     ["Filter", "筛选"],
     ["Filters", "筛选器"],
     ["Clear", "清除"],
+    ["Clear all", "清空全部"],
     ["Clear filters", "清除筛选"],
     ["Refresh", "刷新"],
     ["Reload", "重新加载"],
@@ -204,6 +220,7 @@
     ["Bring Your Own Key", "自带密钥"],
     ["Connect Provider", "连接提供商"],
     ["Provider Key", "提供商密钥"],
+    ["Provider Keys", "提供商密钥"],
     ["Routing Rules", "路由规则"],
     ["Fallback", "回退"],
     ["Fallbacks", "回退"],
@@ -294,10 +311,27 @@
     ["Notifications", "通知"],
     ["Sign Out", "退出登录"],
     ["Choose a clear and descriptive name.", "选择一个清晰且便于识别的名称。"],
+    ["Expiration times cannot be modified. You must create a new API key to have a new expiration time.", "过期时间无法修改。你必须创建新的 API 密钥才能使用新的过期时间。"],
     ["Credit limit (optional)", "余额限额（可选）"],
     ["Once the credits (in $USD) consumed by this API key sum to this amount or more, it will no longer work. Leave blank for no limit.", "当此 API 密钥消耗的积分（美元）累计达到或超过该金额后，它将停止工作。留空表示不设限额。"],
+    ["Reset limit", "重置限额"],
     ["Reset limit every...", "每隔多久重置限额..."],
     ["N/A", "不适用"],
+    ["Metadata", "元数据"],
+    ["Budgets", "预算"],
+    ["No budget limits configured.", "未配置预算限制。"],
+    ["Budget Policies", "预算策略"],
+    ["Set spending limits and rate caps to control usage costs.", "设置支出限额和速率上限，以控制使用成本。"],
+    ["Model & Provider Access", "模型与提供商访问"],
+    ["All allowed", "全部允许"],
+    ["Prompt Injection", "提示词注入"],
+    ["Detect and respond to prompt injection attempts.", "检测并响应提示词注入尝试。"],
+    ["Sensitive Info Detection", "敏感信息检测"],
+    ["Identify and handle PII, credentials, and personal data.", "识别并处理 PII、凭据和个人数据。"],
+    ["Account Settings", "账号设置"],
+    ["models", "模型"],
+    ["Prevent this key from being used. You can re-enable it later.", "阻止此密钥被使用。你稍后可以重新启用它。"],
+    ["Permanently delete this key. This action cannot be undone.", "永久删除此密钥。此操作无法撤销。"],
     ["Choose when this API key should expire. Select \"No expiration\" for a key that never expires.", "选择此 API 密钥的过期时间。选择“永不过期”可创建不会过期的密钥。"],
     ["No expiration", "永不过期"],
     ["1 hour", "1 小时"],
@@ -328,6 +362,8 @@
     ["Providers", "提供商"],
     ["Web Search", "网页搜索"],
     ["Available", "可用"],
+    ["Partial", "部分可用"],
+    ["Unavailable", "不可用"],
     ["Not configured", "未配置"],
     ["Show 47 more", "再显示 47 个"],
     ["Key Priority and Fallback", "密钥优先级与回退"],
@@ -782,11 +818,66 @@
     ["Filter by Transcription output models", "按转录模型筛选"],
     ["Search models...", "搜索模型..."],
     ["Tokens processed in the last 7 days", "过去 7 天处理的 Token"],
+    ["The Unified Interface For LLMs", "大语言模型的统一接口"],
+    ["Better", "更低的"],
+    ["Better prices, better uptime, no subscriptions.", "更低价格，更高可用性，无需订阅。"],
+    [", better", "，更高的"],
+    [", no subscriptions.", "，无需订阅。"],
+    ["prices", "价格"],
+    ["uptime", "可用性"],
+    ["Explore Models", "探索模型"],
+    ["One API for Any Model", "一个 API 适配任意模型"],
+    ["Access all major models through a single, unified interface. OpenAI SDK works out of the box.", "通过单一统一接口访问所有主流模型。开箱即用兼容 OpenAI SDK。"],
+    ["Browse all", "浏览全部"],
+    ["Higher Availability", "更高可用性"],
+    ["Reliable AI models via our distributed infrastructure. Fall back to other providers when one goes down.", "通过我们的分布式基础设施稳定访问 AI 模型。当某个提供商不可用时，会自动回退到其他提供商。"],
+    ["Price and Performance", "价格与性能"],
+    ["Keep costs in check without sacrificing speed. OpenRouter runs at the edge for minimal latency between your users and their inference.", "在不牺牲速度的前提下控制成本。OpenRouter 在边缘运行，尽可能降低用户与推理之间的延迟。"],
+    ["Custom Data Policies", "自定义数据策略"],
+    ["Protect your organization with fine grained data policies. Ensure prompts only go to the models and providers you trust.", "通过细粒度数据策略保护你的组织。确保提示词只发送给你信任的模型和提供商。"],
+    ["View docs", "查看文档"],
+    ["Featured Models", "精选模型"],
+    ["View all", "查看全部"],
+    ["Featured Agents", "精选 Agent"],
+    ["Signup", "注册"],
+    ["Sign Up", "注册"],
+    ["Create an account to get started. You can set up an org for your team later.", "创建账号即可开始使用。之后也可以再为团队创建组织。"],
+    ["Buy credits", "购买额度"],
+    ["Credits can be used with any model or provider.", "额度可用于任意模型或提供商。"],
+    ["Get your API key", "获取你的 API 密钥"],
+    ["Create an API key and start making requests.", "创建一个 API 密钥并开始发起请求。"],
+    ["Fully OpenAI compatible", "完全兼容 OpenAI"],
+    ["Recent Announcements", "最新公告"],
+    ["View supported models", "查看支持的模型"],
+    ["Add and configure your API keys. Drag a key by its handle to reorder it within a section or move it between sections.", "添加并配置你的 API 密钥。拖动密钥旁的手柄可在同一分区内重新排序，或移动到其他分区。"],
+    ["Prioritized", "优先"],
+    ["Attempted in order, before falling back to OpenRouter endpoints.", "会按顺序优先尝试，然后才会回退到 OpenRouter 端点。"],
+    ["Add prioritized key", "添加优先密钥"],
+    ["Add a prioritized key", "添加一个优先密钥"],
+    ["Tried only after attempting OpenRouter endpoints, in order.", "仅会在尝试 OpenRouter 端点之后按顺序使用。"],
+    ["Add fallback key", "添加回退密钥"],
+    ["Add a fallback key", "添加一个回退密钥"],
+    ["Firecrawl provides web search and scraping capabilities for your OpenRouter requests. When enabled, models can search the web and extract content from URLs during inference.", "Firecrawl 为你的 OpenRouter 请求提供网页搜索和抓取能力。启用后，模型可以在推理过程中搜索网页并从 URL 提取内容。"],
+    ["OpenRouter partners with Firecrawl to offer 10,000 free credits (which expire after 3 months). Accepting the Terms of Service below will create a Firecrawl account linked to your email and provision an API key automatically.", "OpenRouter 与 Firecrawl 合作提供 10,000 免费额度（3 个月后过期）。接受下方服务条款后，将自动创建一个与你邮箱绑定的 Firecrawl 账号并配置 API 密钥。"],
+    ["Firecrawl offer: 10,000 free credits (expire after 3 months)", "Firecrawl 优惠：10,000 免费额度（3 个月后过期）"],
+    ["I accept the", "我接受"],
+    ["Firecrawl Terms of Service", "Firecrawl 服务条款"],
+    ["I accept the Firecrawl Terms of Service", "我接受 Firecrawl 服务条款"],
+    ["Accepting will create a Firecrawl account linked to your email address and apply the offer automatically.", "接受后将创建一个与你邮箱地址绑定的 Firecrawl 账号，并自动应用该优惠。"],
+    ["These settings apply as defaults to all your API requests. Individual requests can override these settings using the", "这些设置会作为你所有 API 请求的默认值。单个请求仍可通过"],
+    ["parameter, unless you enable \"Prevent overrides\" in the plugin configuration.", "参数覆盖这些设置，除非你在插件配置中启用“阻止覆盖”。"],
+    ["These settings apply as defaults to all your API requests. Individual requests can override these settings using the plugins parameter, unless you enable \"Prevent overrides\" in the plugin configuration.", "这些设置会作为你所有 API 请求的默认值。单个请求仍可通过 plugins 参数覆盖这些设置，除非你在插件配置中启用“阻止覆盖”。"],
+    ["View plugin documentation", "查看插件文档"],
+    ["Pareto Router", "Pareto 路由器"],
+    ["Set default coding quality tier for the Pareto code router", "为 Pareto 代码路由器设置默认编码质量档位"],
+    ["Toggle Pareto Router", "切换 Pareto 路由器"],
   ]);
 
   const REGEX_RULES = [
     [/^API Keys \| Settings \| OpenRouter$/, "API 密钥 | 设置 | OpenRouter"],
+    [/^API Key \| Settings \| OpenRouter$/, "API 密钥 | 设置 | OpenRouter"],
     [/^BYOK \| Settings \| OpenRouter$/, "BYOK | 设置 | OpenRouter"],
+    [/^(.+) BYOK \| Settings \| OpenRouter$/, "$1 BYOK | 设置 | OpenRouter"],
     [/^Routing \| Settings \| OpenRouter$/, "路由 | 设置 | OpenRouter"],
     [/^Presets \| Settings \| OpenRouter$/, "预设 | 设置 | OpenRouter"],
     [/^Plugins \| Settings \| OpenRouter$/, "插件 | 设置 | OpenRouter"],
@@ -809,7 +900,10 @@
     [/^(\d+)\s+guardrails$/, "$1 个护栏"],
     [/^(\d+)\s+result$/, "$1 个结果"],
     [/^(\d+)\s+results$/, "$1 个结果"],
+    [/^(\d+)\s+model$/, "$1 个模型"],
+    [/^(\d+)\s+models$/, "$1 个模型"],
     [/^(\d+)\s+models matched$/, "匹配 $1 个模型"],
+    [/^(\d+)\s+allowed$/, "允许 $1 个"],
     [/^(.+)\s+context$/, "$1 上下文"],
     [/^\$(.+)\s+\/M input tokens$/, "$$$1 / 百万输入 Token"],
     [/^\$(.+)\s+\/M output tokens$/, "$$$1 / 百万输出 Token"],
@@ -828,6 +922,7 @@
     [/^(\d+)% used of unlimited$/, "已使用 $1%，上限不限"],
     [/^(\d+)% used of (.+)$/, "已使用 $1%，上限 $2"],
     [/^Delete (.+)$/, "删除 $1"],
+    [/^Remove (.+)$/, "移除 $1"],
     [/^Edit (.+)$/, "编辑 $1"],
     [/^Copy (.+)$/, "复制 $1"],
     [/^Create (.+)$/, "创建 $1"],
@@ -842,12 +937,16 @@
   let scheduled = false;
   let started = false;
 
+  function isAllowedPath() {
+    const pathname = typeof location.pathname === "string" ? location.pathname : "";
+    if (pathname === "/") {
+      return true;
+    }
+    return ALLOWED_PATH_PREFIXES.some((prefix) => pathname.startsWith(prefix));
+  }
+
   function translate(source) {
     if (!source || !source.trim()) {
-      return source;
-    }
-
-    if (isSensitive(source)) {
       return source;
     }
 
@@ -857,6 +956,10 @@
     const exact = EXACT_TEXT.get(trimmed);
     if (exact) {
       return `${leading}${exact}${trailing}`;
+    }
+
+    if (isSensitive(source)) {
+      return source;
     }
 
     for (const [pattern, replacement] of REGEX_RULES) {
@@ -1039,8 +1142,17 @@
     if (!document.body) {
       return 0;
     }
+    if (!isAllowedPath()) {
+      return 0;
+    }
     observer?.disconnect();
     try {
+      if (typeof document.title === "string") {
+        const nextTitle = translate(document.title);
+        if (nextTitle !== document.title) {
+          document.title = nextTitle;
+        }
+      }
       const changed = translateSplitTextElements(document.body)
         + translateTextNodes(document.body)
         + translateAttributes(document.body);
@@ -1106,13 +1218,16 @@
     if (!location.hostname.endsWith("openrouter.ai")) {
       return;
     }
+    if (!isAllowedPath()) {
+      return;
+    }
     observeRouteChanges();
     window.__openrouterWorkspacesZh = {
       run,
       translate,
-      version: "0.1.2",
+      version: "0.1.8",
     };
-    console.info(`[${SCRIPT_NAME}] OpenRouter Workspaces Chinese userscript bootstrapped`);
+    console.info(`[${SCRIPT_NAME}] OpenRouter 中文化插件 bootstrapped`);
     const delayStart = () => setTimeout(startTranslation, INITIAL_RUN_DELAY_MS);
     if (document.readyState === "complete") {
       delayStart();
