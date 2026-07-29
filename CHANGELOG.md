@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.9 - 2026-07-29
+
+- Added rankings translations for LLM, image, embedding, rerank, video, speech, and transcription leaderboards.
+- Added workspace overview, guardrail budget/model access, classifier, logs, and privacy settings translations.
+- Updated userscript metadata with Chinese description, author, and icon.
+
 ## 0.1.8 - 2026-05-26
 
 - Added stable homepage footer and card label translations such as provider counts and weekly trend labels.

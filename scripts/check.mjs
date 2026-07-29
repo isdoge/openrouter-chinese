@@ -35,7 +35,7 @@ assert.equal(existsSync(output), true, "expected dist userscript to exist");
 const code = readFileSync(output, "utf8");
 assert.match(code, /==UserScript==/);
 assert.match(code, /@name\s+OpenRouter 中文化插件/);
-assert.match(code, /@version\s+0\.1\.8/);
+assert.match(code, /@version\s+0\.1\.9/);
 assert.match(code, /@match\s+https:\/\/openrouter\.ai\/\*/);
 assert.match(code, /API 密钥/);
 assert.match(code, /工作区/);
@@ -160,6 +160,12 @@ const translationCases = [
   ["Monthly Tokens", "月度 Token"],
   ["Global Users", "全球用户"],
   ["Weekly Trend", "周趋势"],
+  ["Top models by task", "按任务排名的热门模型"],
+  ["Image Model Rankings", "图像模型排行榜"],
+  ["Introducing Workspaces!", "工作区功能上线！"],
+  ["Classifiers", "分类器"],
+  ["Upstream Requests", "上游请求"],
+  ["Prompt Injection Allowlist", "提示词注入允许列表"],
   ["by", "由"],
   ["active models on", "个活跃模型，来自"],
   ["providers", "个提供商"],
