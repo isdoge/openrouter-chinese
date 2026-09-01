@@ -35,7 +35,7 @@ assert.equal(existsSync(output), true, "expected dist userscript to exist");
 const code = readFileSync(output, "utf8");
 assert.match(code, /==UserScript==/);
 assert.match(code, /@name\s+OpenRouter 中文化插件/);
-assert.match(code, /@version\s+0\.1\.9/);
+assert.match(code, /@version\s+0\.1\.10/);
 assert.match(code, /@match\s+https:\/\/openrouter\.ai\/\*/);
 assert.match(code, /API 密钥/);
 assert.match(code, /工作区/);
@@ -196,6 +196,26 @@ const translationCases = [
   ["$1 /M input Token", "$1 / 百万输入 Token"],
   ["$2 /M output Token", "$2 / 百万输出 Token"],
   ["256K context", "256K 上下文"],
+  ["Server Tools", "服务器工具"],
+  ["Third-party data", "第三方数据"],
+  ["Leaderboard", "排行榜"],
+  ["Benchmarks | OpenRouter", "基准测试 | OpenRouter"],
+  ["No data in this window", "此时间段内无数据"],
+  ["No prior data", "无历史数据"],
+  ["Total available", "总可用余额"],
+  ["Usage summary", "用量概览"],
+  ["Cache hit rate", "缓存命中率"],
+  ["I confirm that I am 18 years of age or older.", "我确认我已年满 18 岁。"],
+  ["Usage data through Aug 31, 2026", "用量数据截至 Aug 31, 2026"],
+  ["Toggle Web Search", "切换 Web Search"],
+  ["Web Search docs", "Web Search 文档"],
+  ["Hide Cached", "隐藏已缓存"],
+  ["List view", "列表视图"],
+  ["Total available credits: $0.00", "总可用余额：$0.00"],
+  ["12.2T tokens", "12.2T Token"],
+  ["Each task’s leading models, ranked by share of", "各任务领先模型，按"],
+  ["spend", "支出"],
+  ["on OpenRouter", "在 OpenRouter 上的份额排名"],
 ];
 
 for (const [sourceText, expected] of translationCases) {

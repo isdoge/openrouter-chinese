@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.1.10 - 2026-09-02
+
+- Added homepage hero and footer translations such as `Discover`, `Trust Center`, and `Developer Platform`.
+- Added models-page filter labels including weekly tokens, throughput, discounts, and zero data retention.
+- Enabled the userscript on `/benchmarks` and added benchmarks-page translations with title rule.
+- Added rankings-page translations for the leaderboard, measurement methodology, licensing notes, and split-link fragments.
+- Added server-tools catalog translations covering web access, multi-model, code execution, and utility tools.
+- Added workspace translations for files, default guardrails, routing, presets, budgets, and server tools overview.
+- Added account settings translations for profile usage summary, activity charts, credits, management keys, notifications, and 18+ attestation.
+- Added API key detail translations for expiration, credit limit, and 30-day spend labels.
+- Fixed queued re-translations never running in background tabs by adding a `setTimeout` fallback when `requestAnimationFrame` does not fire.
+
 ## 0.1.9 - 2026-07-29
 
 - Added rankings translations for LLM, image, embedding, rerank, video, speech, and transcription leaderboards.
