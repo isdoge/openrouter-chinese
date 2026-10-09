@@ -244,6 +244,7 @@
 
 
   const DICTIONARY_URL = "https://raw.githubusercontent.com/isdoge/openrouter-chinese/main/locales/zh-CN.json";
+  const DICTIONARY_PREVIEW_URL = "https://raw.githubusercontent.com/isdoge/openrouter-chinese/refs/heads/feat/remote-dictionary-preview/locales/zh-CN.json";
   const DICTIONARY_CACHE_KEY = "openrouter-zh-remote-dictionary-v1";
   const LAST_SUCCESS_KEY = "openrouter-zh-remote-last-success-v1";
   const LAST_ATTEMPT_KEY = "openrouter-zh-remote-last-attempt-v1";
@@ -293,17 +294,19 @@
     }
   }
 
-  function requestDictionary(force) {
-    return new Promise((resolve, reject) => {
+  async function requestDictionary(force) {
+    const requestUrl = (baseUrl) => new Promise((resolve, reject) => {
       try {
         GM_xmlhttpRequest({
           method: "GET",
-          url: DICTIONARY_URL + (force ? "?refresh=" + Date.now() : ""),
+          url: baseUrl + (force ? "?refresh=" + Date.now() : ""),
           timeout: 12000,
           headers: { Accept: "application/json" },
           onload(response) {
             if (response.status !== 200) {
-              reject(new Error("HTTP " + response.status));
+              const error = new Error("HTTP " + response.status);
+              error.status = response.status;
+              reject(error);
               return;
             }
             resolve(response.responseText);
@@ -319,6 +322,16 @@
         reject(error);
       }
     });
+
+    try {
+      return await requestUrl(DICTIONARY_URL);
+    } catch (error) {
+      // 在 PR 合并前 main 尚无词典，404 时从试验分支加载完整词典。
+      if (error.status === 404) {
+        return requestUrl(DICTIONARY_PREVIEW_URL);
+      }
+      throw error;
+    }
   }
 
   async function refreshDictionary(force = false) {
