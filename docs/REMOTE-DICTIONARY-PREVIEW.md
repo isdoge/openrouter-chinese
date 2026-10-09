@@ -2,9 +2,9 @@
 
 ## 合并前安装
 
-[安装试验版 userscript](https://raw.githubusercontent.com/isdoge/openrouter-chinese/feat/remote-dictionary-preview/dist/openrouter-chinese-remote.user.js)
+[安装试验版 userscript](https://raw.githubusercontent.com/isdoge/openrouter-chinese/refs/heads/feat/remote-dictionary-preview/dist/openrouter-chinese-remote.user.js)
 
-直链：https://raw.githubusercontent.com/isdoge/openrouter-chinese/feat/remote-dictionary-preview/dist/openrouter-chinese-remote.user.js
+直链：https://raw.githubusercontent.com/isdoge/openrouter-chinese/refs/heads/feat/remote-dictionary-preview/dist/openrouter-chinese-remote.user.js
 
 独立试验版与原版使用不同的 @name、@namespace 和文件名，不改动原版源码、dist、README 或 npm 脚本。
 
@@ -30,6 +30,6 @@
 
 ## 验证
 
-运行 `node --check src/openrouter-chinese-remote.user.js`、`node --check dist/openrouter-chinese-remote.user.js` 以及 `node scripts/check-remote.mjs`。
+运行 `node --check src/openrouter-chinese-remote.user.js`、`node --check dist/openrouter-chinese-remote.user.js` 、`node scripts/check-remote.mjs` 以及 `node scripts/check-remote-browser.mjs`（需要 Playwright Chromium）。
 
 现有 `npm test` 只检查原版，不覆盖该试验版；两套测试互不影响。
