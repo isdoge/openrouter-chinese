@@ -1,0 +1,30 @@
+name: Remote dictionary preview tests
+
+on:
+  push:
+    branches:
+      - feat/remote-dictionary-preview
+  pull_request:
+    paths:
+      - 'src/openrouter-chinese-remote.user.js'
+      - 'dist/openrouter-chinese-remote.user.js'
+      - 'locales/zh-CN.json'
+      - 'scripts/check-remote.mjs'
+      - '.github/workflows/remote-dictionary-preview.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax checks
+        run: |
+          node --check src/openrouter-chinese-remote.user.js
+          node --check dist/openrouter-chinese-remote.user.js
+      - name: Test remote dictionary
+        run: node scripts/check-remote.mjs
+      - name: Existing test suite (old version)
+        run: npm test
