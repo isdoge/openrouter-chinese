@@ -25,7 +25,7 @@ for (const line of match[1].split("\n").filter((line) => line.trim())) {
 }
 assert.deepEqual(dict, Object.fromEntries(expected), "all effective original translations must be identical");
 
-function harness({ store = new Map(), firstReply = dictionaryText, initialText = "One API for Any Model" } = {}) {
+function harness({ store = new Map(), firstReply = dictionaryText, initialText = "One API for Any Model", simulateMain404 = false } = {}) {
   const node = {
     textContent: initialText,
     parentElement: { tagName: "SPAN", closest() { return null; } },
@@ -68,7 +68,8 @@ function harness({ store = new Map(), firstReply = dictionaryText, initialText =
     GM_registerMenuCommand(_title, callback) { menu = callback; },
     GM_xmlhttpRequest(options) {
       requestCount++;
-      options.onload({ status, responseText: reply });
+      const replyStatus = simulateMain404 && options.url.includes("/main/locales/") ? 404 : status;
+      options.onload({ status: replyStatus, responseText: reply });
     },
     requestAnimationFrame(fn) { timeouts.push(fn); },
     setTimeout(fn) { timeouts.push(fn); return timeouts.length; },
@@ -133,5 +134,12 @@ firstInstallOffline.start();
 assert.equal(firstInstallOffline.context.window.__openrouterChineseRemote.translate("API Keys"), "API 密钥");
 await flush();
 assert.equal(firstInstallOffline.context.window.__openrouterChineseRemote.translate("One API for Any Model"), "One API for Any Model");
+
+const previewBranch = harness({ simulateMain404: true });
+previewBranch.start();
+await flush();
+assert.equal(previewBranch.requests, 2, "before merge, main 404 should retry the preview branch");
+assert.equal(previewBranch.node.textContent, dict["One API for Any Model"],
+  "preview branch fallback must load the full dictionary");
 
 console.log("Remote preview tests passed: 1274 entries, migration, fallback, cache, cooldown, hot update, title update, bad JSON, HTTP failure.");
