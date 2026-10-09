@@ -21,6 +21,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Verify branch userscript install URL
+        run: |
+          curl --fail --location --retry 3 --retry-all-errors "https://raw.githubusercontent.com/isdoge/openrouter-chinese/refs/heads/feat/remote-dictionary-preview/dist/openrouter-chinese-remote.user.js" --output /tmp/remote-preview.user.js
+          grep -q '==UserScript==' /tmp/remote-preview.user.js
       - name: Syntax checks
         run: |
           node --check src/openrouter-chinese-remote.user.js
