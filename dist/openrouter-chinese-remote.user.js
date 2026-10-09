@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         OpenRouter 中文化插件（远程词典试验版）
 // @namespace    https://github.com/isdoge/openrouter-chinese/remote-dictionary-preview
-// @version      0.2.0-beta.1
+// @version      0.2.0-beta.2
 // @description  OpenRouter 中文化测试版：词典从 GitHub 加载，支持本地缓存和定期同步
 // @author       狗带带子
 // @icon         https://ts2.tc.mm.bing.net/th/id/ODF.l3ZEv6Gwma3We2rLiXcGSw?w=32&h=32&qlt=90&pcl=fffffa&o=6&pid=1.2
@@ -344,7 +344,7 @@
       try {
         const successAt = Number(GM_getValue(LAST_SUCCESS_KEY, 0)) || 0;
         const attemptAt = Number(GM_getValue(LAST_ATTEMPT_KEY, 0)) || 0;
-        if (successAt && now - successAt < DICTIONARY_CHECK_INTERVAL_MS) {
+        if (currentDictionaryJson && successAt && now - successAt < DICTIONARY_CHECK_INTERVAL_MS) {
           return false;
         }
         if (attemptAt && now - attemptAt < DICTIONARY_RETRY_INTERVAL_MS) {
@@ -513,6 +513,9 @@
     if (SKIP_TAGS.has(parent.tagName)) {
       return true;
     }
+    if (parent.isContentEditable || parent.closest('[contenteditable]:not([contenteditable="false"])')) {
+      return true;
+    }
     if (parent.closest("[data-openrouter-zh-ignore]")) {
       return true;
     }
@@ -562,6 +565,9 @@
       if (SKIP_TAGS.has(element.tagName)) {
         continue;
       }
+      if (element.isContentEditable || element.closest('[contenteditable]:not([contenteditable="false"])')) {
+        continue;
+      }
       if (element.closest("[data-openrouter-zh-ignore], code, pre, textarea")) {
         continue;
       }
@@ -572,6 +578,10 @@
       const next = translate(source);
       if (next !== source) {
         element.textContent = next;
+        // textContent creates a new node: retain its English source for hot updates.
+        if (element.firstChild) {
+          originalText.set(element.firstChild, { source, translated: next });
+        }
         changed += 1;
       }
     }
@@ -717,7 +727,7 @@
       run,
       translate,
       refreshDictionary,
-      version: "0.2.0-beta.1",
+      version: "0.2.0-beta.2",
     };
     console.info(`[${SCRIPT_NAME}] OpenRouter 中文化插件 bootstrapped`);
     const delayStart = () => setTimeout(startTranslation, INITIAL_RUN_DELAY_MS);

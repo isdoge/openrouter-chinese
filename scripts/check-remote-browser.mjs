@@ -5,7 +5,11 @@ import { chromium } from "playwright";
 const userscript = readFileSync(new URL("../src/openrouter-chinese-remote.user.js", import.meta.url), "utf8");
 const dictionary = JSON.parse(readFileSync(new URL("../locales/zh-CN.json", import.meta.url), "utf8"));
 
-const browser = await chromium.launch({ headless: true, args: ["--no-sandbox"] });
+const browser = await chromium.launch({
+  executablePath: process.env.CHROMIUM_EXECUTABLE_PATH || undefined,
+  headless: true,
+  args: ["--no-sandbox"],
+});
 try {
   const context = await browser.newContext();
   await context.route("https://openrouter.ai/**", (route) => route.fulfill({
@@ -14,7 +18,11 @@ try {
     body: '<!doctype html><html><head><title>API Keys | Settings | OpenRouter</title></head>' +
       '<body><button id="main">One API for Any Model</button>' +
       '<span id="api-keys">API Keys</span>' +
-      '<input id="input" placeholder="Create Workspace"></body></html>',
+      '<input id="input" placeholder="Create Workspace">' +
+      '<span id="split">One API <!-- React boundary -->for Any Model</span>' +
+      '<div contenteditable="true"><span id="editable">Models</span>' +
+      '<span id="editable-split">One API <!-- boundary -->for Any Model</span></div>' +
+      '<textarea id="user-input" placeholder="Create Workspace">Models</textarea></body></html>',
   }));
 
   const page = await context.newPage();
@@ -39,6 +47,11 @@ try {
   assert.equal(await page.locator("#input").getAttribute("placeholder"), "创建工作区");
   assert.equal(await page.title(), "API 密钥 | 设置 | OpenRouter");
   assert.equal(await page.evaluate(() => window.__fakeGM.requests), 1);
+  assert.equal(await page.locator("#split").textContent(), dictionary["One API for Any Model"]);
+  assert.equal(await page.locator("#editable").textContent(), "Models");
+  assert.equal(await page.locator("#editable-split").textContent(), "One API for Any Model");
+  assert.equal(await page.locator("#user-input").textContent(), "Models");
+  assert.equal(await page.locator("#user-input").getAttribute("placeholder"), "创建工作区");
 
   // Reactive DOM additions on the existing route.
   await page.evaluate(() => {
@@ -71,6 +84,8 @@ try {
     await window.__openrouterChineseRemote.refreshDictionary(true);
   }, JSON.stringify(updated));
   assert.equal(await page.locator("#main").textContent(), "热更新测试通过");
+  assert.equal(await page.locator("#split").textContent(), "热更新测试通过");
+  assert.equal(await page.locator("#editable").textContent(), "Models");
   assert.equal(await page.title(), "标题热更新测试通过");
 
   // Invalid response must retain the previous effective dictionary.
