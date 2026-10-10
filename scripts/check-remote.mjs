@@ -142,4 +142,14 @@ assert.equal(previewBranch.requests, 2, "before merge, main 404 should retry the
 assert.equal(previewBranch.node.textContent, dict["One API for Any Model"],
   "preview branch fallback must load the full dictionary");
 
+for (const cached of [undefined, "{broken", "{}"] ) {
+  const store = new Map([["openrouter-zh-remote-last-success-v1", Date.now()]]);
+  if (cached !== undefined) store.set("openrouter-zh-remote-dictionary-v1", cached);
+  const recovering = harness({ store });
+  recovering.start();
+  await flush();
+  assert.equal(recovering.requests, 1, "missing/invalid cache must not wait 24 hours after recent success");
+  assert.equal(recovering.node.textContent, dict["One API for Any Model"]);
+}
+
 console.log("Remote preview tests passed: 1274 entries, migration, fallback, cache, cooldown, hot update, title update, bad JSON, HTTP failure.");
