@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         OpenRouter 中文化插件（远程词典试验版）
 // @namespace    https://github.com/isdoge/openrouter-chinese/remote-dictionary-preview
-// @version      0.2.0-beta.3
+// @version      0.2.0-beta.5
 // @description  OpenRouter 中文化测试版：词典从 GitHub 加载，支持本地缓存和定期同步
 // @author       狗带带子
 // @icon         https://ts2.tc.mm.bing.net/th/id/ODF.l3ZEv6Gwma3We2rLiXcGSw?w=32&h=32&qlt=90&pcl=fffffa&o=6&pid=1.2
@@ -36,6 +36,7 @@
     "/fusion",
     "/models",
     "/benchmarks",
+    "/ori",
   ];
   const ATTRIBUTES = [
     "aria-label",
@@ -174,6 +175,7 @@
     [/^Classifiers \| OpenRouter$/, "分类器 | OpenRouter"],
     [/^New Classifier \| OpenRouter$/, "新建分类器 | OpenRouter"],
     [/^(.+) \| Settings \| OpenRouter$/, "$1 | 设置 | OpenRouter"],
+    [/^Security \| OpenRouter$/, "安全 | OpenRouter"],
     [/^Default (.+)$/, "默认 $1"],
     [/^Short (.+)$/, "短格式 $1"],
     [/^ISO (.+)$/, "ISO $1"],
@@ -183,6 +185,13 @@
     [/^Tools: (\d+) active$/, "工具：$1 个已启用"],
     [/^Show (\d+) more$/, "显示另外 $1 个"],
     [/^Key limit: (\d+)% used of unlimited$/, "密钥限额：已使用 $1%，上限不限"],
+    [/^Set a spend limit on (\d+) keys?$/, "为 $1 个密钥设置消费限额"],
+    [/^Review (\d+) keys? without expiration$/, "复查 $1 个无过期时间的密钥"],
+    [/^Actions for (.+)$/, "$1 的操作"],
+    [/^Remove (\d+) unused keys?$/, "移除 $1 个闲置密钥"],
+    [/^Unused (\d+)\+ days$/, "$1 天以上未使用"],
+    [/^(\d+) of (\d+) keys?$/, "第 $1 个，共 $2 个密钥"],
+    [/^of (\d+) keys?$/, "共 $1 个密钥"],
     [/^(\d+)\s+key$/, "$1 个密钥"],
     [/^(\d+)\s+keys$/, "$1 个密钥"],
     [/^(\d+)\s+guardrail$/, "$1 个护栏"],
@@ -220,7 +229,10 @@
     [/^Search by (.+)\.\.\.$/, "按$1搜索..."],
     [/^Benchmarks \| OpenRouter$/, "基准测试 | OpenRouter"],
     [/^Usage data through (.+)$/, "用量数据截至 $1"],
-    [/^([\d.,]+[KMGTP]?)\s+[Tt]okens?$/, "$1 令牌"],
+    [/^([\d.,]+[KMGTP]?)\s+[Tt]okens?$/, "$1 Token"],
+    // "$1.46B tokens" 用大写 B（十亿），原有的 KMGTP 集合漏了它
+    [/^([\d.,]+[KMGTPBT]?)\s+tokens?$/, "$1 Token"],
+    [/^([\d.,]+[KMGTPBT]?)\s+characters$/, "$1 个字符"],
     [/^(\d+)% off$/, "减 $1%"],
     [/^(\d+)mo ago$/, "$1 个月前"],
     [/^(\d+)w ago$/, "$1 周前"],
@@ -243,6 +255,23 @@
     [/^(.+) docs$/, "$1 文档"],
     [/^Toggle (.+)$/, "切换 $1"],
     [/^Total available credits: \$(.+)$/, "总可用余额：$$$1"],
+    [/^([\d.,]+[KMBT]?)\s+subrequests$/, "$1 次子请求"],
+    [/^(.+):\s+([\d,]+)\s+subrequests this week$/, "$1：本周 $2 个子请求"],
+    [/^Domain · ([\d.]+)% of all spend$/, "领域 · 占总支出 $1%"],
+    [/^([\d.]+)% of all spend$/, "占总支出 $1%"],
+    // 分类名（语言 / 领域）自身也要过一遍词典，否则会留下 "占 Hebrew 支出的 58.0%" 这类半截译文。
+    [/^([\d.]+)% of (.+?) spend$/, (match, pct, category) => `占${translate(category)}支出的 ${pct}%`],
+    // 变化幅度标题（含具体数字）
+    [/^([\d.,]+%) — Change in (.+) in the last week from the previous period$/, (match, pct, metric) => `${pct} — 本周${translate(metric)}数相对上一周期的变化`],
+    [/^([\d.,]+[KMBT]?)\s+requests$/, "$1 次请求"],
+    [/^(\$[\d.,]+)\/M$/, "$1/百万"],
+    [/^Find a model to pin, (\d+) of (\d+) pinned$/, "查找要固定的模型，已固定 $1 个，共 $2 个"],
+    [/^(.+) · via OpenRouter$/, "$1 · 通过 OpenRouter"],
+    [/^([\d.,]+)\s+tok\/s$/, "$1 Token/秒"],
+    // Apps 页：榜单名次（分类名同样要过词典）
+    [/^Ranked at #(\d+) in (.+) category$/, (match, rank, cat) => `在${translate(cat)}分类中排名第 ${rank}`],
+    // 转录页：字符数计价
+    [/^(\$[\d.,]+)\/M characters$/, "$1/百万字符"],
   ];
 
 
@@ -273,8 +302,10 @@
         return null;
       }
       for (const [key, value] of entries) {
-        if (!key.trim() || key.length > 1000
-            || typeof value !== "string" || !value.trim() || value.length > 5000) {
+        // 单条上限放宽到 4000：排行榜页的说明段落本身就是一条完整的界面文案，
+        // 1000 字符的旧上限会让它（以及整份词典）被静默丢弃。
+        if (!key.trim() || key.length > 4000
+            || typeof value !== "string" || !value.trim() || value.length > 8000) {
           return null;
         }
       }

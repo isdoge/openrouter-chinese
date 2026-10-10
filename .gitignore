@@ -15,3 +15,7 @@ _upload_exclude/
 .codex/
 .claude/
 dist/*.map
+
+# 本机验收报告与临时验证文件，不进入公开仓库
+docs/ACCEPTANCE*.md
+.verify-tmp/
