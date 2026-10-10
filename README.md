@@ -12,7 +12,7 @@
 ｜
 [词典与更新说明](docs/DICTIONARY.md)
 
-> **v1.0.0 已发布。** 默认安装入口是下方固定版本链接。由于 `main` 尚未合入本轮变更，脚本管理器升级链在合入前仍可能指向旧产物；安装或升级请优先使用固定的 `v1.0.0` 地址。
+> **v1.0.0 已正式发布。** [Release](https://github.com/isdoge/openrouter-chinese/releases/tag/v1.0.0) 与固定标签安装入口已可用，不依赖开发分支的合并状态。`main` 尚未合入本次正式版，安装或升级请使用下方固定的 `v1.0.0` 地址，不要将 `main` 的旧脚本当作 1.0.0。
 
 ## 功能
 
@@ -22,6 +22,7 @@
 - 启动时检查自动更新，并每 10 分钟检查更新门槛；成功后冷却 24 小时，失败后冷却 10 分钟，并非每 10 分钟都下载词典。
 - 提供启用／停用自动更新、立即更新、查看状态和导入 JSON 菜单；手动强制更新可绕过自动更新冷却。
 - 兼容 React 动态渲染：路由切换、弹层打开和异步内容加载后自动重翻译，避免误翻模型 ID、URL、邮箱和 API Key 等内容。
+- 补齐 Security、排行榜主榜及子页、Apps 与 Ori 页面相关文案；`Token` / `tokens` 保持英文，不翻译为“令牌”。
 
 内置“完整词典”指本次发布的全部 1731 条词条，不代表 OpenRouter 的所有页面或未来文案都已翻译。离线兜底指翻译词典不依赖网络，并不让 OpenRouter 网站变成离线应用。
 
@@ -69,22 +70,29 @@
 
 ### 2. 安装正式脚本
 
-本次主安装入口为 GitHub `v1.0.0` Release 资产：
+本次主安装入口为已发布的 GitHub `v1.0.0` Release 资产：
 
-```text
-https://github.com/isdoge/openrouter-chinese/releases/download/v1.0.0/openrouter-chinese.user.js
-```
+[安装 OpenRouter 中文化插件 1.0.0](https://github.com/isdoge/openrouter-chinese/releases/download/v1.0.0/openrouter-chinese.user.js)
 
-固定标签备用地址：
+固定标签备用入口提供相同的正式脚本：
 
-```text
-https://raw.githubusercontent.com/isdoge/openrouter-chinese/v1.0.0/dist/openrouter-chinese.user.js
-https://cdn.jsdelivr.net/gh/isdoge/openrouter-chinese@v1.0.0/dist/openrouter-chinese.user.js
-```
+- [GitHub raw](https://raw.githubusercontent.com/isdoge/openrouter-chinese/v1.0.0/dist/openrouter-chinese.user.js)
+- [jsDelivr 镜像](https://cdn.jsdelivr.net/gh/isdoge/openrouter-chinese@v1.0.0/dist/openrouter-chinese.user.js)：GitHub 无法访问时可尝试，镜像也不保证所有地区可达。
 
-在对应 Release／标签发布后打开地址，按 Tampermonkey 提示确认安装；若下载为文件，可将该文件导入管理器。上述地址不保证所有地区都可访问。本轮不在 GreasyFork 发布。
+打开上述已发布地址，按 Tampermonkey 提示确认安装；若下载为文件，可将该文件导入管理器。本项目尚未在 GreasyFork 发布。
 
-原在线版用户如需沿旧身份升级，可使用[固定标签的兼容入口](https://raw.githubusercontent.com/isdoge/openrouter-chinese/v1.0.0/dist/openrouter-chinese-remote.user.js)。纯本地备用版的安装与切换见 [legacy 说明](legacy/README.md)。不要同时启用多个入口。
+#### 应该下载哪个文件？
+
+| 文件／入口 | 用途 |
+| --- | --- |
+| Release 的 `openrouter-chinese.user.js` | 默认正式版，新用户优先安装这一份 |
+| Release 的 `openrouter-chinese-remote.user.js` | 原在线版用户沿旧 namespace 升级的兼容入口，不是另一款产品 |
+| Release 的 `zh-CN.online.json` | 词典数据，只用于“导入 JSON”，不是可安装脚本 |
+| 固定标签的 `legacy/openrouter-chinese.user.js` | 纯本地备用版 0.1.11；当前不作为 Release 附件提供 |
+
+原在线版用户可使用 [Release 的兼容入口](https://github.com/isdoge/openrouter-chinese/releases/download/v1.0.0/openrouter-chinese-remote.user.js)，或[固定标签的兼容入口](https://raw.githubusercontent.com/isdoge/openrouter-chinese/v1.0.0/dist/openrouter-chinese-remote.user.js)。
+
+纯本地备用版可通过 [GitHub raw](https://raw.githubusercontent.com/isdoge/openrouter-chinese/v1.0.0/legacy/openrouter-chinese.user.js) 或 [jsDelivr](https://cdn.jsdelivr.net/gh/isdoge/openrouter-chinese@v1.0.0/legacy/openrouter-chinese.user.js) 获取；安装与切换见 [legacy 说明](legacy/README.md)。**正式版、备用版与兼容入口只选一份启用。**
 
 ### 3. 刷新 OpenRouter 页面
 
