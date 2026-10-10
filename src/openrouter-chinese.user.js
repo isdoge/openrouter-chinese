@@ -39,6 +39,7 @@
     "/models",
     "/benchmarks",
     "/ori",
+    "/spawn",
     "/discover",
     "/compare",
   ];
@@ -89,6 +90,8 @@
     [/^Video Model Rankings \| OpenRouter$/, "视频模型排行榜 | OpenRouter"],
     [/^Speech Model Rankings \| OpenRouter$/, "语音模型排行榜 | OpenRouter"],
     [/^Transcription Model Rankings \| OpenRouter$/, "转录模型排行榜 | OpenRouter"],
+    [/^I\/O Logging Settings \| Observability \| OpenRouter$/, "I/O 日志设置 | 可观测性 | OpenRouter"],
+    [/^(\d+)\s+routers$/, "$1 个路由器"],
     [/^Classifiers \| OpenRouter$/, "分类器 | OpenRouter"],
     [/^New Classifier \| OpenRouter$/, "新建分类器 | OpenRouter"],
     [/^(.+) \| Settings \| OpenRouter$/, "$1 | 设置 | OpenRouter"],

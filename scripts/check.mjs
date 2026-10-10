@@ -47,6 +47,11 @@ const artifacts = [
 for (const artifact of artifacts) {
   assert.equal(artifact.rules, artifacts[0].rules, `${artifact.file} must use the same regex rules`);
 }
+for (const artifact of artifacts) {
+  for (const prefix of ["/workspaces", "/spawn", "/discover", "/compare"]) {
+    assert.ok(artifact.code.includes(`"${prefix}"`), `${artifact.file} must allow path prefix ${prefix}`);
+  }
+}
 
 const translationCases = [
   ["API Keys", "API 密钥"],
@@ -78,6 +83,20 @@ const translationCases = [
   ["Filter by User, Model, Provider, API Key, or Modality", "按用户、模型、提供商、API 密钥或模态筛选"],
   ["No transactions found", "未找到交易"],
   ["No management keys yet", "还没有管理密钥"],
+  // 2026-10-11 漏翻补齐：logs 空态、benchmarks、observability、spawn
+  ["You don't have any sessions yet", "你还没有任何会话"],
+  ["Group related generations into sessions to follow full conversations, debug chains, and track multi-step agents. Pass a", "将相关生成归组为会话，以便跟进完整对话、调试调用链和追踪多步 Agent。在 API 请求中传入"],
+  [" in your API request to get started.", "即可开始使用。"],
+  ["You don't have any", "你还没有任何"],
+  ["yet", "记录"],
+  ["Compare how model routers balance quality, cost and speed on each benchmark.", "比较各模型路由器在每个基准测试上的质量、成本与速度表现。"],
+  ["Edit a meme as an image or animate it as a clip, graded on whether the brief landed.", "把一张梗图改写成图片，或把它做成短视频，按创意是否到位评分。"],
+  ["7 routers", "7 个路由器"],
+  ["I/O Logging Settings | Observability | OpenRouter", "I/O 日志设置 | 可观测性 | OpenRouter"],
+  ["Pick a Cloud", "选择云平台"],
+  ["Under the Hood", "背后原理"],
+  ["Opens an SSH session. You are in.", "打开一个 SSH 会话。你已经就绪。"],
+  ["Made by agents, for agents", "由 Agent 打造，为 Agent 而生"],
   ["Zero Data Retention", "零数据保留"],
   ["Allowed Providers", "允许的提供商"],
   ["Enable analytics cookies", "启用分析 Cookie"],
