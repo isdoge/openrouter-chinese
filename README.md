@@ -12,7 +12,7 @@
 ｜
 [词典与更新说明](docs/DICTIONARY.md)
 
-> **v1.0.0 已正式发布。** [Release](https://github.com/isdoge/openrouter-chinese/releases/tag/v1.0.0) 与固定标签安装入口已可用，不依赖开发分支的合并状态。`main` 尚未合入本次正式版，安装或升级请使用下方固定的 `v1.0.0` 地址，不要将 `main` 的旧脚本当作 1.0.0。
+> **v1.0.0 已正式发布并合入 `main`。** 推荐通过 [Release](https://github.com/isdoge/openrouter-chinese/releases/tag/v1.0.0) 或下方固定的 `v1.0.0` 地址安装；`main` 的脚本升级链与在线词典入口也已提供本次正式版本。
 
 ## 功能
 
@@ -102,7 +102,7 @@
 
 ### 脚本升级与词典更新是两件事
 
-- **脚本升级**由用户脚本管理器执行。主版的 `@updateURL`／`@downloadURL` 仍保留 `main/dist/openrouter-chinese.user.js` 更新链，供未来升级使用；只有本轮变更合入 `main` 后，该链才会提供本次正式版本。当前请使用上面的固定 `v1.0.0` 安装入口。
+- **脚本升级**由用户脚本管理器执行。主版的 `@updateURL`／`@downloadURL` 使用 `main/dist/openrouter-chinese.user.js` 更新链，目前已提供正式版 1.0.0，后续脚本升级也沿此入口发布。首次安装推荐使用上面的固定 `v1.0.0` 安装入口。
 - **词典更新**由正式脚本下载静态 JSON，不必为了每次补词重新安装脚本；关闭自动更新后，内置词典与已有可用缓存仍可翻译。
 - 固定标签安装地址固定的是这次安装文件，不意味着正式版的后续在线词典也锁定在该标签；词典源仍先尝试 `main`，再使用发布快照兜底。
 
