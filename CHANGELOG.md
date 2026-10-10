@@ -1,69 +1,91 @@
-# Changelog
+# 更新记录
 
-## 0.1.10 - 2026-09-02
+## 1.0.0 — 2026-10-10
 
-- Added homepage hero and footer translations such as `Discover`, `Trust Center`, and `Developer Platform`.
-- Added models-page filter labels including weekly tokens, throughput, discounts, and zero data retention.
-- Enabled the userscript on `/benchmarks` and added benchmarks-page translations with title rule.
-- Added rankings-page translations for the leaderboard, measurement methodology, licensing notes, and split-link fragments.
-- Added server-tools catalog translations covering web access, multi-model, code execution, and utility tools.
-- Added workspace translations for files, default guardrails, routing, presets, budgets, and server tools overview.
-- Added account settings translations for profile usage summary, activity charts, credits, management keys, notifications, and 18+ attestation.
-- Added API key detail translations for expiration, credit limit, and 30-day spend labels.
-- Fixed queued re-translations never running in background tabs by adding a `setTimeout` fallback when `requestAnimationFrame` does not fire.
+OpenRouter 中文化插件正式版，发布资产与固定版本安装入口已上线。
 
-## 0.1.9 - 2026-07-29
+- 正式版本统一命名为 **OpenRouter 中文化插件**，不再使用“在线版”或“试验版”后缀。
+- 默认版内置完整 1731 条词典，并结合缓存与多源在线更新；首次运行没有缓存或在线词典不可达时，也可使用完整内置词典。
+- 补充工作区、账号设置、模型筛选、搜索弹窗和账号菜单等常见界面文案，保留动态页面与弹层的自动翻译。
+- 在线词典按 GitHub raw、jsDelivr、固定发布快照依次回退；请求失败、超时、坏 JSON 或旧词典版本时，继续使用现有可用词典翻译。
+- 优先使用较新缓存，防止旧缓存覆盖较新内置词条；在线词典只包含部分内容时，也保留其余内置词条。
+- 提供启用／停用自动更新、立即更新、查看状态和导入 JSON 菜单；自动更新成功后冷却 24 小时，失败后冷却 10 分钟，手动强制更新可绕过冷却。
+- 手动导入使用带版本信息的在线 JSON 词典，拒绝较旧版本或相同版本但内容不同的数据，避免意外回退。
+- 保留旧在线安装链的兼容入口及原有 namespace／缓存身份；不同 namespace 之间不承诺自动共享缓存。
+- 原纯本地路线移入 `legacy/` 作为备用，历史脚本暂时保留，不作为新用户的默认安装推荐。
+- 词典更新仅下载静态 JSON，不执行代码，不调用 OpenRouter API、不读取 cookie，不收集或上传密钥、token、账号信息或页面内容，不修改账号真实数据。
 
-- Added rankings translations for LLM, image, embedding, rerank, video, speech, and transcription leaderboards.
-- Added workspace overview, guardrail budget/model access, classifier, logs, and privacy settings translations.
-- Updated userscript metadata with Chinese description, author, and icon.
+## 0.1.11（纯本地备用版）— 随 v1.0.0 发布
 
-## 0.1.8 - 2026-05-26
+- 使用与正式版相同的完整 1731 条词典快照，词典 revision 为 `2026101001`。
+- 保持纯本地翻译与 `@grant none`，翻译运行时不联网更新词典。
+- 沿用原本地版的显示名与 namespace；与正式版二选一，不要同时启用。
+- 后续随词典更新独立递增备用版版本号，不与正式脚本的 `1.x` 版本混用。
 
-- Added stable homepage footer and card label translations such as provider counts and weekly trend labels.
-- Updated README coverage notes to include the OpenRouter homepage.
+## 0.1.10 — 2026-09-02
 
-## 0.1.7 - 2026-05-26
+- 补充首页主标题区和页脚的“发现”“信任中心”“开发者平台”等文案。
+- 补充模型筛选中的周 Token 用量、吞吐量、优惠和零数据保留标签。
+- 支持基准测试页面，补充页面内容与标题翻译。
+- 补充排行榜的榜单、统计方法、许可说明和跨链接文案。
+- 补充服务器工具目录中的网页访问、多模型、代码执行和实用工具文案。
+- 补充工作区的文件、默认防护规则、路由、预设、预算和服务器工具概览文案。
+- 补充账号设置的用量概览、活动图表、额度、管理密钥、通知和成人内容确认文案。
+- 补充 API Key 详情中的到期时间、额度上限和近 30 天支出标签。
+- 修复后台标签页中排队的重翻译可能一直不执行的问题。
 
-- Enabled the userscript on the OpenRouter homepage while keeping non-target public pages outside the runtime allowlist.
-- Added homepage translations for the hero section, stable feature cards, onboarding steps, and stable section headings.
+## 0.1.9 — 2026-07-29
 
-## 0.1.6 - 2026-05-26
+- 补充大语言模型、图像、嵌入、重排序、视频、语音和转录排行榜文案。
+- 补充工作区概览、防护规则的预算／模型访问、分类器、日志和隐私设置文案。
+- 完善脚本的中文说明、作者信息和图标。
 
-- Added BYOK provider-detail translations for key management labels, ordering hints, and provider-specific page titles.
-- Added BYOK web-search translations for Firecrawl onboarding copy and terms text.
-- Added plugin-page translations for the settings info tooltip and Pareto Router labels.
+## 0.1.8 — 2026-05-26
 
-## 0.1.5 - 2026-05-26
+- 补充首页页脚与卡片标签中的提供商数量、每周趋势等稳定文案。
+- 更新项目说明，明确首页翻译覆盖范围。
 
-- Added guardrail detail-page translations for budget policies, model/provider access, prompt injection, and sensitive info sections.
-- Added dynamic translations for labels such as `Clear all`, `Remove <name>`, and `<count> allowed`.
-- Translate `document.title` during each run so page titles like `Guardrails | OpenRouter` follow the same dictionary.
+## 0.1.7 — 2026-05-26
 
-## 0.1.4 - 2026-05-26
+- 支持 OpenRouter 首页，同时继续排除未纳入翻译范围的公共页面。
+- 补充首页主标题区、功能卡片、入门步骤和常见分区标题。
 
-- Added API key detail-page translations for titles, descriptions, budget labels, status labels, and model-count badges.
-- Moved exact-match checks ahead of sensitive-value filtering so safe short labels like `N/A` can still be translated.
+## 0.1.6 — 2026-05-26
 
-## 0.1.3 - 2026-05-26
+- 补充 BYOK 提供商详情中的密钥管理、排序提示和页面标题。
+- 补充 BYOK 网页搜索中 Firecrawl 的入门说明与条款文案。
+- 补充插件设置提示与 Pareto Router 文案。
 
-- Renamed the public userscript display name to `OpenRouter 中文化插件`.
-- Simplified userscript metadata to a single `https://openrouter.ai/*` match with runtime path allowlisting.
-- Aligned source, dist, and install URLs around `openrouter-chinese.user.js`.
-- Refreshed README screenshots and installation docs for the GitHub release flow.
+## 0.1.5 — 2026-05-26
 
-## 0.1.2 - 2026-05-21
+- 补充防护规则详情中的预算、模型／提供商访问、提示注入和敏感信息文案。
+- 补充“全部清除”“移除指定项”“允许项数量”等动态短语。
+- 页面标题随页面翻译更新。
 
-- Added GitHub install metadata and public-facing project files.
-- Added OpenRouter top-level page coverage for labs, apps, rankings, chat, fusion, and models.
-- Improved translations for presets, I/O logging settings, profile statistics, labs, apps, rankings, chat, fusion, and model filters.
-- Fixed model price units when `tokens` had already been partially translated to `Token`.
+## 0.1.4 — 2026-05-26
 
-## 0.1.1 - 2026-05-21
+- 补充 API Key 详情中的标题、说明、预算状态和模型数量标签。
+- 改善安全短标签的翻译匹配，例如 `N/A`。
 
-- Expanded live-page translations from workspaces/settings pages to OpenRouter public navigation pages.
-- Added runtime split-text handling for headings rendered by React across multiple text nodes.
+## 0.1.3 — 2026-05-26
 
-## 0.1.0 - 2026-05-20
+- 将脚本显示名统一为“OpenRouter 中文化插件”。
+- 统一网站匹配范围与运行时页面选择。
+- 统一源脚本、安装产物和安装地址的文件名。
+- 更新项目截图和 GitHub 安装说明。
 
-- Initial Tampermonkey userscript for OpenRouter workspaces and account settings pages.
+## 0.1.2 — 2026-05-21
+
+- 提供 GitHub 安装信息与公开项目说明。
+- 扩展到 Labs、Apps、排行榜、聊天、Fusion 和模型等顶层页面。
+- 改善预设、输入／输出日志设置、资料统计和模型筛选等文案。
+- 修复模型价格单位的部分翻译问题。
+
+## 0.1.1 — 2026-05-21
+
+- 从工作区／设置页面扩展到 OpenRouter 公共导航页面。
+- 改善 React 将标题拆成多个文本节点时的翻译。
+
+## 0.1.0 — 2026-05-20
+
+- 首次提供 OpenRouter 工作区与账号设置的 Tampermonkey 中文化脚本。

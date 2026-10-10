@@ -1,0 +1,29 @@
+name: 正式版本检查
+
+on:
+  push:
+    branches: [main, 'fix/**', 'release/**']
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: 构建正式版与本地备用版
+        run: npm run build
+      - name: 检查生成产物已同步
+        run: git diff --exit-code -- dist legacy/openrouter-chinese.user.js locales/zh-CN.online.json
+      - name: 运行翻译引擎与词典更新回归
+        run: npm test
+      - name: 检查标签与正式版本一致
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: node --input-type=module -e 'import p from "./package.json" with { type: "json" }; if (process.env.GITHUB_REF_NAME !== "v" + p.version) process.exit(1);'

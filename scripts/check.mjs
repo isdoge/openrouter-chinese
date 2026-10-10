@@ -8,41 +8,40 @@ import { fileURLToPath } from "node:url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, "..");
-const source = path.join(rootDir, "src", "openrouter-chinese.user.js");
-const output = path.join(rootDir, "dist", "openrouter-chinese.user.js");
+const dictionary = JSON.parse(readFileSync(path.join(rootDir, "locales", "zh-CN.json"), "utf8"));
+const release = JSON.parse(readFileSync(path.join(rootDir, "release.config.json"), "utf8"));
+const pkg = JSON.parse(readFileSync(path.join(rootDir, "package.json"), "utf8"));
+const DICTIONARY_ENTRIES = Object.keys(dictionary).length;
+assert.ok(DICTIONARY_ENTRIES >= 1731, "完整词典不得丢失既有覆盖范围");
+assert.equal(dictionary.schemaVersion, undefined, "the local dictionary must not be an online envelope");
 
-const syntax = spawnSync(process.execPath, ["--check", source], {
-  cwd: rootDir,
-  encoding: "utf8",
+const artifacts = [
+  { file: "dist/openrouter-chinese.user.js", version: pkg.version, canonical: true },
+  { file: "dist/openrouter-chinese-remote.user.js", version: pkg.version },
+  { file: "legacy/openrouter-chinese.user.js", version: release.legacyVersion, legacy: true },
+].map((artifact) => {
+  const output = path.join(rootDir, artifact.file);
+  assert.equal(existsSync(output), true, `expected ${artifact.file}; run npm run build first`);
+  const syntax = spawnSync(process.execPath, ["--check", output], { cwd: rootDir, encoding: "utf8" });
+  assert.equal(syntax.status, 0,
+    `expected ${artifact.file} syntax check to pass\nstdout:\n${syntax.stdout}\nstderr:\n${syntax.stderr}`);
+  const code = readFileSync(output, "utf8");
+  assert.match(code, /==UserScript==/);
+  assert.match(code, new RegExp(`^//[ \\t]*@version[ \\t]+${artifact.version.replaceAll(".", "\\.")}[ \\t]*\\r?$`, "m"));
+  assert.match(code, /@match\s+https:\/\/openrouter\.ai\/\*/);
+  if (artifact.legacy) {
+    assert.deepEqual([...code.matchAll(/^\/\/\s*@grant[ \t]+([^\r\n]+)/gm)].map((match) => match[1].trim()), ["none"]);
+  } else {
+    assert.match(code, /^\/\/[ \t]*@name[ \t]+OpenRouter 中文化插件[ \t]*\r?$/m, "online release name must have no suffix");
+  }
+  const rules = code.match(/^\s*const REGEX_RULES = \[[\s\S]*?^\s*\];/m)?.[0];
+  assert.ok(rules, `expected REGEX_RULES in ${artifact.file}`);
+  return { ...artifact, code, rules };
 });
-assert.equal(
-  syntax.status,
-  0,
-  `expected userscript syntax check to pass\nstdout:\n${syntax.stdout}\nstderr:\n${syntax.stderr}`,
-);
+for (const artifact of artifacts) {
+  assert.equal(artifact.rules, artifacts[0].rules, `${artifact.file} must use the same regex rules`);
+}
 
-const build = spawnSync(process.execPath, ["scripts/build.mjs"], {
-  cwd: rootDir,
-  encoding: "utf8",
-});
-assert.equal(
-  build.status,
-  0,
-  `expected build to pass\nstdout:\n${build.stdout}\nstderr:\n${build.stderr}`,
-);
-assert.equal(existsSync(output), true, "expected dist userscript to exist");
-
-const code = readFileSync(output, "utf8");
-assert.match(code, /==UserScript==/);
-assert.match(code, /@name\s+OpenRouter 中文化插件/);
-assert.match(code, /@version\s+0\.1\.10/);
-assert.match(code, /@match\s+https:\/\/openrouter\.ai\/\*/);
-assert.match(code, /API 密钥/);
-assert.match(code, /工作区/);
-assert.match(code, /操作菜单/);
-assert.match(code, /OpenRouter 中文化插件 bootstrapped/);
-
-const { translate, context } = loadTranslator(code);
 const translationCases = [
   ["API Keys", "API 密钥"],
   ["Create and manage your API keys.", "创建并管理你的 API 密钥。"],
@@ -80,6 +79,11 @@ const translationCases = [
   ["Once saved, you can configure policies, assign members, and manage API keys from the guardrail detail page.", "保存后，你可以在护栏详情页配置策略、分配成员并管理 API 密钥。"],
   ["Guardrails | OpenRouter", "护栏 | OpenRouter"],
   ["API Key | Settings | OpenRouter", "API 密钥 | 设置 | OpenRouter"],
+  ["LLM Rankings | OpenRouter", "大语言模型排行榜 | OpenRouter"],
+  ["Decision Model Rankings | OpenRouter", "决策模型排行榜 | OpenRouter"],
+  ["Batch Rankings | OpenRouter", "批量排行榜 | OpenRouter"],
+  ["App & Agent Rankings | OpenRouter", "应用与 Agent 排行榜 | OpenRouter"],
+  ["Ori - Use Every Model, Right Where You Are | OpenRouter", "Ori - 使用每一个模型，就在你身边 | OpenRouter"],
   ["Open navigation menu", "打开导航菜单"],
   ["Grey", "灰色"],
   ["Purple", "紫色"],
@@ -218,25 +222,41 @@ const translationCases = [
   ["on OpenRouter", "在 OpenRouter 上的份额排名"],
 ];
 
-for (const [sourceText, expected] of translationCases) {
-  assert.equal(translate(sourceText), expected, `expected translation for ${sourceText}`);
+for (const artifact of artifacts) {
+  const { translate, context, api, gmCalls } = loadTranslator(artifact.code, artifact);
+  if (artifact.legacy) {
+    await api.refreshDictionary(true);
+    assert.equal(gmCalls.length, 0, "legacy manual refresh must not call GM APIs");
+  }
+  for (const [sourceText, expected] of translationCases) {
+    assert.equal(translate(sourceText), expected, `${artifact.file}: expected translation for ${sourceText}`);
+  }
+  for (const [sourceText, expected] of Object.entries(dictionary)) {
+    assert.equal(translate(sourceText), expected, `${artifact.file}: built-in entry ${sourceText}`);
+  }
+  for (const text of ["sk-or-v1-ce2...fe3", "isdoge@qq.com", "openai/gpt-5", "https://openrouter.ai/models", "abcdefghijklmnop1234"]) {
+    assert.equal(translate(text), text, `${artifact.file}: sensitive text must stay untouched`);
+  }
+  for (const text of ["tokens", "Token", "37.6T tokens", "37.6T Token"]) {
+    assert.match(translate(text), /\btokens?\b/i, `${artifact.file}: tokens must remain English`);
+    assert.doesNotMatch(translate(text), /令牌/);
+  }
+  api.run();
+  assert.equal(gmCalls.length, 0, "translation must not call forbidden GM APIs");
+  assert.equal(context.document.title, "护栏 | OpenRouter");
+  assert.equal(context.document.documentElement.lang, "zh-CN");
+  const { api: homeApi } = loadTranslator(artifact.code, { ...artifact, pathname: "/", title: "OpenRouter" });
+  assert.equal(typeof homeApi.run, "function");
 }
 
-assert.equal(translate("sk-or-v1-ce2...fe3"), "sk-or-v1-ce2...fe3");
-assert.equal(translate("isdoge@qq.com"), "isdoge@qq.com");
-context.__openrouterWorkspacesZh.run();
-assert.equal(context.document.title, "护栏 | OpenRouter");
-const { context: homeContext } = loadTranslator(code, {
-  pathname: "/",
-  title: "OpenRouter",
-});
-assert.equal(typeof homeContext.__openrouterWorkspacesZh?.run, "function");
-
-console.log("check passed");
+console.log(`基础回归通过：${artifacts.length} 类产物，每类 ${DICTIONARY_ENTRIES} 条词典，同一正则引擎，本地备用版无 GM 调用。`);
 
 function loadTranslator(code, overrides = {}) {
+  const timers = [];
+  const gmCalls = [];
+  const forbiddenGM = () => { gmCalls.push("forbidden GM call"); throw new Error("GM API must not be called in this test"); };
   const context = {
-    console,
+    console: { info() {}, warn() {} },
     location: {
       hostname: "openrouter.ai",
       pathname: overrides.pathname ?? "/workspaces",
@@ -277,27 +297,34 @@ function loadTranslator(code, overrides = {}) {
     requestAnimationFrame(callback) {
       callback();
     },
-    setTimeout() {},
+    GM_getValue: overrides.legacy ? forbiddenGM : (key, defaultValue) => key === "openrouter-zh-auto-update-v1" ? false : defaultValue,
+    GM_setValue: overrides.legacy ? forbiddenGM : () => {},
+    GM_registerMenuCommand: overrides.legacy ? forbiddenGM : () => {},
+    GM_xmlhttpRequest: forbiddenGM,
+    setTimeout(callback) { timers.push(callback); return timers.length; },
+    setInterval() {},
     URL,
   };
-  context.window = {
-    addEventListener() {},
-    get __openrouterWorkspacesZh() {
-      return context.__openrouterWorkspacesZh;
-    },
-    set __openrouterWorkspacesZh(value) {
-      context.__openrouterWorkspacesZh = value;
-    },
-  };
+  context.window = { addEventListener() {} };
   context.globalThis = context;
 
-  vm.runInNewContext(code, context, {
-    filename: "openrouter-chinese.user.js",
-  });
+  vm.runInNewContext(code, context, { filename: overrides.file ?? "openrouter-chinese.user.js", timeout: 3000 });
+  // Exercise the actual scheduled startup rather than translating through run() first.
+  for (const callback of timers.splice(0)) callback();
 
-  assert.equal(typeof context.__openrouterWorkspacesZh?.translate, "function");
-  return {
-    translate: context.__openrouterWorkspacesZh.translate,
-    context,
-  };
+  const api = context.window.__openrouterChinese ?? context.window.__openrouterChineseRemote;
+  for (const method of ["run", "translate", "refreshDictionary", "getDictionaryStatus"]) {
+    assert.equal(typeof api?.[method], "function", `expected public API method ${method}`);
+    if (!overrides.legacy) assert.equal(typeof context.window.__openrouterChineseRemote?.[method], "function");
+    if (overrides.canonical) assert.equal(typeof context.window.__openrouterChinese?.[method], "function");
+  }
+  assert.equal(api.version, overrides.version);
+  const status = api.getDictionaryStatus();
+  assert.equal(status.version, overrides.version);
+  assert.equal(status.revision, release.dictionaryRevision);
+  assert.equal(status.entries, DICTIONARY_ENTRIES);
+  assert.equal(typeof status.source, "string");
+  assert.equal(status.autoUpdate, false);
+  assert.equal(gmCalls.length, 0, "startup and status must not call forbidden GM APIs");
+  return { translate: api.translate, context, api, gmCalls };
 }

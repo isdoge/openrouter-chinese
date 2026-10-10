@@ -1,6 +1,6 @@
 {
   "name": "openrouter-chinese",
-  "version": "0.1.10",
+  "version": "1.0.0",
   "type": "module",
   "description": "Tampermonkey userscript for Chinese localization of OpenRouter workspaces and settings pages",
   "license": "MIT",
@@ -10,6 +10,7 @@
   },
   "scripts": {
     "build": "node scripts/build.mjs",
-    "test": "node scripts/check.mjs"
+    "dictionary:bump": "node scripts/bump-dictionary.mjs",
+    "test": "npm run build && node scripts/check.mjs && node scripts/check-remote.mjs && node scripts/check-build.mjs"
   }
 }
