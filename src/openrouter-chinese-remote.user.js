@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         OpenRouter 中文化插件（远程词典试验版）
 // @namespace    https://github.com/isdoge/openrouter-chinese/remote-dictionary-preview
-// @version      0.2.0-beta.2
+// @version      0.2.0-beta.3
 // @description  OpenRouter 中文化测试版：词典从 GitHub 加载，支持本地缓存和定期同步
 // @author       狗带带子
 // @icon         https://ts2.tc.mm.bing.net/th/id/ODF.l3ZEv6Gwma3We2rLiXcGSw?w=32&h=32&qlt=90&pcl=fffffa&o=6&pid=1.2
@@ -180,6 +180,9 @@
     [/^Relative (.+)$/, "相对时间 $1"],
     [/^Select all keys$/, "选择全部密钥"],
     [/^Select (.+)$/, "选择 $1"],
+    [/^Tools: (\d+) active$/, "工具：$1 个已启用"],
+    [/^Show (\d+) more$/, "显示另外 $1 个"],
+    [/^Key limit: (\d+)% used of unlimited$/, "密钥限额：已使用 $1%，上限不限"],
     [/^(\d+)\s+key$/, "$1 个密钥"],
     [/^(\d+)\s+keys$/, "$1 个密钥"],
     [/^(\d+)\s+guardrail$/, "$1 个护栏"],
@@ -217,7 +220,7 @@
     [/^Search by (.+)\.\.\.$/, "按$1搜索..."],
     [/^Benchmarks \| OpenRouter$/, "基准测试 | OpenRouter"],
     [/^Usage data through (.+)$/, "用量数据截至 $1"],
-    [/^([\d.,]+[KMGTP]?) tokens$/, "$1 Token"],
+    [/^([\d.,]+[KMGTP]?)\s+[Tt]okens?$/, "$1 令牌"],
     [/^(\d+)% off$/, "减 $1%"],
     [/^(\d+)mo ago$/, "$1 个月前"],
     [/^(\d+)w ago$/, "$1 周前"],
@@ -460,6 +463,12 @@
     return false;
   }
 
+  // 纯 ASCII 英文（不含 CJK）。词典可能把英文规范化成另一个英文（如历史上的 "tokens" -> "Token"），
+  // 节点会因此冻死在规范化后的英文上，后续新增的译项再也无法生效，需要按当前文本重新派生源文本。
+  function isPlainEnglish(value) {
+    return /^[\x00-\x7F]+$/.test(value);
+  }
+
   function getOriginalText(node) {
     const current = node.textContent || "";
     const state = originalText.get(node);
@@ -474,6 +483,10 @@
     }
 
     if (current !== state.translated) {
+      state.source = current;
+      state.translated = translate(current);
+    } else if (isPlainEnglish(current) && translate(current) !== current) {
+      // 当前文本是英文且本身可译：说明它停留在某个规范化（英文值）译项上，按当前文本重新派生。
       state.source = current;
       state.translated = translate(current);
     }
@@ -501,6 +514,10 @@
     if (current !== state.translated) {
       state.source = current;
       state.translated = translate(current || "");
+    } else if (current && isPlainEnglish(current) && translate(current) !== current) {
+      // 与 getOriginalText 同一规则：英文值规范化译项不应把节点冻死在英文上。
+      state.source = current;
+      state.translated = translate(current);
     }
     return state.source;
   }
@@ -727,7 +744,7 @@
       run,
       translate,
       refreshDictionary,
-      version: "0.2.0-beta.2",
+      version: "0.2.0-beta.3",
     };
     console.info(`[${SCRIPT_NAME}] OpenRouter 中文化插件 bootstrapped`);
     const delayStart = () => setTimeout(startTranslation, INITIAL_RUN_DELAY_MS);

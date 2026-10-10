@@ -12,7 +12,7 @@ assert.equal(source, dist, "dist and src must match");
 assert.match(source, /@name\s+OpenRouter 中文化插件（远程词典试验版）/);
 assert.match(source, /@grant\s+GM_xmlhttpRequest/);
 assert.match(source, /@connect\s+raw\.githubusercontent\.com/);
-assert.equal(Object.keys(dict).length, 1274, "migration should preserve all unique translations");
+assert.equal(Object.keys(dict).length, 1396, "dictionary should carry migrated entries plus acceptance additions");
 
 const match = old.match(/^  const EXACT_TEXT = new Map\(\[\r?\n([\s\S]*?)^  \]\);/m);
 assert.ok(match, "original dictionary exists");
@@ -23,7 +23,17 @@ for (const line of match[1].split("\n").filter((line) => line.trim())) {
   assert.ok(record, "unrecognized original record: " + line);
   expected.set(JSON.parse(record[1]), JSON.parse(record[2]));
 }
-assert.deepEqual(dict, Object.fromEntries(expected), "all effective original translations must be identical");
+// 远程词典是原版词典的超集：迁移条目逐一保持原值，仅允许验收中记录在案的修正。
+// "tokens" 原值为英文 "Token"（规范化条目），会把节点冻死在英文上，故改为 "令牌"。
+const DOCUMENTED_OVERRIDES = new Map([["tokens", "令牌"]]);
+for (const [key, value] of expected) {
+  if (DOCUMENTED_OVERRIDES.has(key)) {
+    assert.equal(dict[key], DOCUMENTED_OVERRIDES.get(key), `documented override changed: ${key}`);
+    continue;
+  }
+  assert.equal(dict[key], value, `original translation must be preserved: ${key}`);
+}
+assert.ok(Object.keys(dict).length > expected.size, "remote dictionary should keep growing beyond the migrated set");
 
 function harness({ store = new Map(), firstReply = dictionaryText, initialText = "One API for Any Model", simulateMain404 = false } = {}) {
   const node = {
@@ -152,4 +162,65 @@ for (const cached of [undefined, "{broken", "{}"] ) {
   assert.equal(recovering.node.textContent, dict["One API for Any Model"]);
 }
 
-console.log("Remote preview tests passed: 1274 entries, migration, fallback, cache, cooldown, hot update, title update, bad JSON, HTTP failure.");
+// --- 真实浏览器验收补充：英文值规范化条目曾把节点冻死（Rankings 页 "Token" 漏翻）---
+// 词典含 "tokens" -> "Token"（英文值）与 "Token" -> "令牌" 时，节点被规范化成 "Token" 后
+// 旧实现会一直从陈旧源文本 "tokens" 推导，永远得不到 "令牌"。
+{
+  const normalizingDictionary = JSON.stringify({
+    ...dict,
+    "tokens": "Token",
+    "Token": "令牌",
+  });
+  const frozen = harness({ firstReply: normalizingDictionary, initialText: "tokens" });
+  frozen.start();
+  await flush();
+  assert.equal(frozen.node.textContent, "Token", "normalizing entry should apply once");
+  // 站点随后把文本渲染为 "Token"（自身规范化或 i18n 结果）
+  frozen.node.textContent = "Token";
+  frozen.context.window.__openrouterChineseRemote.run();
+  assert.equal(frozen.node.textContent, "令牌",
+    "node frozen at an English normalization value must be re-derived from the current text");
+  // 再次运行必须保持稳定，不得在 "Token" 与 "令牌" 之间反复横跳
+  frozen.context.window.__openrouterChineseRemote.run();
+  assert.equal(frozen.node.textContent, "令牌", "re-translation must be stable");
+}
+
+// --- 验收新增的动态正则规则 ---
+{
+  const ready = harness();
+  ready.start();
+  await flush();
+  const { translate } = ready.context.window.__openrouterChineseRemote;
+  assert.equal(translate("Tools: 8 active"), "工具：8 个已启用");
+  assert.equal(translate("Show 63 more"), "显示另外 63 个");
+  assert.equal(translate("Key limit: 0% used of unlimited"), "密钥限额：已使用 0%，上限不限");
+  assert.equal(translate("37.6T Token"), "37.6T 令牌");
+  assert.equal(translate("37.6T tokens"), "37.6T 令牌");
+  assert.equal(translate("sk-or-v1-abc"), "sk-or-v1-abc", "API keys must stay untouched");
+  assert.equal(translate("openai/gpt-5"), "openai/gpt-5", "model ids must stay untouched");
+}
+
+// --- 验收新增的词典条目 ---
+{
+  const ready = harness();
+  ready.start();
+  await flush();
+  const { translate } = ready.context.window.__openrouterChineseRemote;
+  for (const [key, value] of [
+    ["Dashboard", "控制台"],
+    ["Tools", "工具"],
+    ["Dismiss", "关闭"],
+    ["Security", "安全"],
+    ["Switch account", "切换账号"],
+    ["Author", "作者"],
+    ["New chat", "新聊天"],
+    ["Upload", "上传"],
+    ["Routers", "路由器"],
+    ["Finish Reason", "结束原因"],
+  ]) {
+    assert.equal(dict[key], value, `dictionary entry added: ${key}`);
+    assert.equal(translate(key), value, `translate must apply new entry: ${key}`);
+  }
+}
+
+console.log("Remote preview tests passed: 1396 entries, migration, fallback, cache, cooldown, hot update, title update, bad JSON, HTTP failure, normalization freeze fix, new regex rules.");
