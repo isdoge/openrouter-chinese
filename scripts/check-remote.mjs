@@ -12,7 +12,7 @@ assert.equal(source, dist, "dist and src must match");
 assert.match(source, /@name\s+OpenRouter 中文化插件（远程词典试验版）/);
 assert.match(source, /@grant\s+GM_xmlhttpRequest/);
 assert.match(source, /@connect\s+raw\.githubusercontent\.com/);
-assert.equal(Object.keys(dict).length, 1391, "dictionary should carry migrated entries plus acceptance additions");
+assert.equal(Object.keys(dict).length, 1396, "dictionary should carry migrated entries plus acceptance additions");
 
 const match = old.match(/^  const EXACT_TEXT = new Map\(\[\r?\n([\s\S]*?)^  \]\);/m);
 assert.ok(match, "original dictionary exists");

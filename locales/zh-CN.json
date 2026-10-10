@@ -1389,5 +1389,10 @@
   "How model routers balance quality, cost and speed across every benchmark with at least four model routers.": "模型路由器如何在每个至少有四个模型路由器参与的基准测试中平衡质量、成本与速度。",
   "Six seconds of video, held to one duration and resolution across every model.": "六秒视频，所有模型统一时长与分辨率。",
   "One sentence, every voice: did the words come back, and was direction performed?": "一句话，所有声音：文字是否正确返回，指示是否被演绎？",
-  "Image prompts built to fail: depth, direction, counting, and text in the frame.": "专门设计为会失败的图像提示词：深度、方向、计数和画面中的文字。"
+  "Image prompts built to fail: depth, direction, counting, and text in the frame.": "专门设计为会失败的图像提示词：深度、方向、计数和画面中的文字。",
+  "Search OpenRouter": "搜索 OpenRouter",
+  "Popular": "热门",
+  "Trending this week": "本周趋势",
+  "Search models, providers, pages, docs...": "搜索模型、提供商、页面、文档...",
+  "Recent sessions": "最近会话"
 }
