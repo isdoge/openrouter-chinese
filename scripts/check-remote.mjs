@@ -223,4 +223,4 @@ for (const cached of [undefined, "{broken", "{}"] ) {
   }
 }
 
-console.log("Remote preview tests passed: 1391 entries, migration, fallback, cache, cooldown, hot update, title update, bad JSON, HTTP failure, normalization freeze fix, new regex rules.");
+console.log("Remote preview tests passed: 1396 entries, migration, fallback, cache, cooldown, hot update, title update, bad JSON, HTTP failure, normalization freeze fix, new regex rules.");
