@@ -87,6 +87,8 @@
     [/^Transcription Model Rankings \| OpenRouter$/, "转录模型排行榜 | OpenRouter"],
     [/^I\/O Logging Settings \| Observability \| OpenRouter$/, "I/O 日志设置 | 可观测性 | OpenRouter"],
     [/^(\d+)\s+routers$/, "$1 个路由器"],
+    // 站点自身 i18n 会把句中的 Docs 率先翻成"文档"，导致整节点文本对不上词典键，这里用正则兜底。
+    [/^Learn more about session tracking in our (?:(.+))?$/, (match, tail) => "关于会话追踪的更多说明见我们的" + (tail ? " " + tail : "")],
     [/^Classifiers \| OpenRouter$/, "分类器 | OpenRouter"],
     [/^New Classifier \| OpenRouter$/, "新建分类器 | OpenRouter"],
     [/^(.+) \| Settings \| OpenRouter$/, "$1 | 设置 | OpenRouter"],
