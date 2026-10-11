@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         OpenRouter 中文化插件
 // @namespace    https://github.com/isdoge/openrouter-chinese/remote-dictionary-preview
-// @version      1.0.2
+// @version      1.0.3
 // @description  中文化 OpenRouter 界面，内置完整词典，支持缓存与多源在线更新
 // @author       狗带带子
 // @icon         https://ts2.tc.mm.bing.net/th/id/ODF.l3ZEv6Gwma3We2rLiXcGSw?w=32&h=32&qlt=90&pcl=fffffa&o=6&pid=1.2
@@ -92,6 +92,8 @@
     [/^Transcription Model Rankings \| OpenRouter$/, "转录模型排行榜 | OpenRouter"],
     [/^I\/O Logging Settings \| Observability \| OpenRouter$/, "I/O 日志设置 | 可观测性 | OpenRouter"],
     [/^(\d+)\s+routers$/, "$1 个路由器"],
+    // 应用详情页：榜单标题中的应用名是动态的，保留原文。
+    [/^Top models used by (.+) this month$/, "$1 本月用量最高的模型"],
     // 站点自身 i18n 会把句中的 Docs 率先翻成"文档"，导致整节点文本对不上词典键，这里用正则兜底。
     [/^Learn more about session tracking in our (?:(.+))?$/, (match, tail) => "关于会话追踪的更多说明见我们的" + (tail ? " " + tail : "")],
     [/^Classifiers \| OpenRouter$/, "分类器 | OpenRouter"],
@@ -197,9 +199,9 @@
   ];
 
 
-  const SCRIPT_VERSION = "1.0.2";
+  const SCRIPT_VERSION = "1.0.3";
   const ONLINE_MODE = true;
-  const DICTIONARY_REVISION = 2026101003;
+  const DICTIONARY_REVISION = 2026101004;
   // 本地版构建时注入完整快照；在线版为空对象，词典全部来自外置 JSON。
   const BUILTIN_DICTIONARY = {};
   let EXACT_TEXT = new Map(Object.entries(BUILTIN_DICTIONARY));
@@ -221,7 +223,7 @@
   const DICTIONARY_SOURCES = [
     "https://raw.githubusercontent.com/isdoge/openrouter-chinese/main/locales/zh-CN.online.json",
     "https://cdn.jsdelivr.net/gh/isdoge/openrouter-chinese@main/locales/zh-CN.online.json",
-    "https://raw.githubusercontent.com/isdoge/openrouter-chinese/v1.0.2/locales/zh-CN.online.json",
+    "https://raw.githubusercontent.com/isdoge/openrouter-chinese/v1.0.3/locales/zh-CN.online.json",
   ];
   const DICTIONARY_CACHE_KEY = "openrouter-zh-remote-dictionary-v1";
   const DICTIONARY_MAX_BYTES = 800_000;

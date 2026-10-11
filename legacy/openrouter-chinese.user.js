@@ -87,6 +87,8 @@
     [/^Transcription Model Rankings \| OpenRouter$/, "转录模型排行榜 | OpenRouter"],
     [/^I\/O Logging Settings \| Observability \| OpenRouter$/, "I/O 日志设置 | 可观测性 | OpenRouter"],
     [/^(\d+)\s+routers$/, "$1 个路由器"],
+    // 应用详情页：榜单标题中的应用名是动态的，保留原文。
+    [/^Top models used by (.+) this month$/, "$1 本月用量最高的模型"],
     // 站点自身 i18n 会把句中的 Docs 率先翻成"文档"，导致整节点文本对不上词典键，这里用正则兜底。
     [/^Learn more about session tracking in our (?:(.+))?$/, (match, tail) => "关于会话追踪的更多说明见我们的" + (tail ? " " + tail : "")],
     [/^Classifiers \| OpenRouter$/, "分类器 | OpenRouter"],
@@ -194,7 +196,7 @@
 
   const SCRIPT_VERSION = "26.10.10";
   const ONLINE_MODE = false;
-  const DICTIONARY_REVISION = 2026101003;
+  const DICTIONARY_REVISION = 2026101004;
   // 本地版构建时注入完整快照；在线版为空对象，词典全部来自外置 JSON。
   const BUILTIN_DICTIONARY = {
   "Skip to content": "跳到内容",
@@ -2203,7 +2205,15 @@
   "Inference powered by OpenRouter with automatic fallbacks, load balancing, and rate limit handling.": "推理由 OpenRouter 驱动，自动处理故障转移、负载均衡与速率限制。",
   "Install Spawn": "安装 Spawn",
   "Made by agents, for agents": "由 Agent 打造，为 Agent 而生",
-  "BETA": "测试版"
+  "BETA": "测试版",
+  "Visit": "访问",
+  "Daily global rank": "全球日排名",
+  "Active since": "上线时间",
+  "Models used": "使用模型数",
+  "OpenRouter Usage": "OpenRouter 用量",
+  "Footer": "页脚",
+  "External Navigation": "即将跳转到外部网站",
+  "You are about to leave OpenRouter and visit an external website. Would you like to continue?": "你即将离开 OpenRouter 并访问外部网站，是否继续？"
 };
   let EXACT_TEXT = new Map(Object.entries(BUILTIN_DICTIONARY));
   let currentRevision = DICTIONARY_REVISION;

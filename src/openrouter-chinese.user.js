@@ -92,6 +92,8 @@
     [/^Transcription Model Rankings \| OpenRouter$/, "转录模型排行榜 | OpenRouter"],
     [/^I\/O Logging Settings \| Observability \| OpenRouter$/, "I/O 日志设置 | 可观测性 | OpenRouter"],
     [/^(\d+)\s+routers$/, "$1 个路由器"],
+    // 应用详情页：榜单标题中的应用名是动态的，保留原文。
+    [/^Top models used by (.+) this month$/, "$1 本月用量最高的模型"],
     // 站点自身 i18n 会把句中的 Docs 率先翻成"文档"，导致整节点文本对不上词典键，这里用正则兜底。
     [/^Learn more about session tracking in our (?:(.+))?$/, (match, tail) => "关于会话追踪的更多说明见我们的" + (tail ? " " + tail : "")],
     [/^Classifiers \| OpenRouter$/, "分类器 | OpenRouter"],
