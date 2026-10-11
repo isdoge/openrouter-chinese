@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "revision": 2026101003,
-  "entries": 2007,
+  "revision": 2026101004,
+  "entries": 2015,
   "dictionary": {
     "Skip to content": "跳到内容",
     "Search": "搜索",
@@ -2009,6 +2009,14 @@
     "Inference powered by OpenRouter with automatic fallbacks, load balancing, and rate limit handling.": "推理由 OpenRouter 驱动，自动处理故障转移、负载均衡与速率限制。",
     "Install Spawn": "安装 Spawn",
     "Made by agents, for agents": "由 Agent 打造，为 Agent 而生",
-    "BETA": "测试版"
+    "BETA": "测试版",
+    "Visit": "访问",
+    "Daily global rank": "全球日排名",
+    "Active since": "上线时间",
+    "Models used": "使用模型数",
+    "OpenRouter Usage": "OpenRouter 用量",
+    "Footer": "页脚",
+    "External Navigation": "即将跳转到外部网站",
+    "You are about to leave OpenRouter and visit an external website. Would you like to continue?": "你即将离开 OpenRouter 并访问外部网站，是否继续？"
   }
 }
