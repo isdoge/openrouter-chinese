@@ -64,7 +64,7 @@ JSON 必须作为数据解析与校验，不使用 `eval` 或其他执行方式�
 
 | 位置 | 本次值 | 维护对象 |
 | --- | --- | --- |
-| `package.json.version` | `1.0.4` | 在线版脚本的功能／引擎版本；**只在脚本源码变化时递增** |
+| `package.json.version` | `1.0.5` | 在线版脚本的功能／引擎版本；**只在脚本源码变化时递增** |
 | `release.config.json.dictionaryRevision` | `2026111302` | 词典内容版本，单调递增；本地版日期版本由它派生（如 `2026111302` → `26.11.13`） |
 
 `release.config.json.dictionarySha256` 记录源词典内容指纹，不是第三种版本号。词典实际变化后，显式运行 `npm run dictionary:bump`，递增 revision 并更新指纹；词典未变化时不需要运行该命令。**`build` 不得自动提升或改写版本字段**；词典变化却未执行 bump 时应报错。

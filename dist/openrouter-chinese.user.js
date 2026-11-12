@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         OpenRouter 中文化插件
 // @namespace    https://github.com/isdoge/openrouter-chinese
-// @version      1.0.4
+// @version      1.0.5
 // @description  中文化 OpenRouter 界面，内置完整词典，支持缓存与多源在线更新
 // @author       狗带带子
 // @icon         https://ts2.tc.mm.bing.net/th/id/ODF.l3ZEv6Gwma3We2rLiXcGSw?w=32&h=32&qlt=90&pcl=fffffa&o=6&pid=1.2
@@ -239,7 +239,7 @@
   ];
 
 
-  const SCRIPT_VERSION = "1.0.4";
+  const SCRIPT_VERSION = "1.0.5";
   const ONLINE_MODE = true;
   const DICTIONARY_REVISION = 2026111302;
   // 本地版构建时注入完整快照；在线版为空对象，词典全部来自外置 JSON。
@@ -263,7 +263,7 @@
   const DICTIONARY_SOURCES = [
     "https://raw.githubusercontent.com/isdoge/openrouter-chinese/main/locales/zh-CN.online.json",
     "https://cdn.jsdelivr.net/gh/isdoge/openrouter-chinese@main/locales/zh-CN.online.json",
-    "https://raw.githubusercontent.com/isdoge/openrouter-chinese/v1.0.4/locales/zh-CN.online.json",
+    "https://raw.githubusercontent.com/isdoge/openrouter-chinese/v1.0.5/locales/zh-CN.online.json",
   ];
   const DICTIONARY_CACHE_KEY = "openrouter-zh-remote-dictionary-v1";
   const DICTIONARY_MAX_BYTES = 800_000;
