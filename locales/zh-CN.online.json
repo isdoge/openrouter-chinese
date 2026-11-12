@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "revision": 2026111301,
-  "entries": 2248,
+  "revision": 2026111302,
+  "entries": 2251,
   "dictionary": {
     "Skip to content": "跳到内容",
     "Search": "搜索",
@@ -2250,6 +2250,9 @@
     "AI Chat Playground - Compare AI Models Side by Side | OpenRouter": "AI 聊天演练场 - 并排对比 AI 模型 | OpenRouter",
     "Chat | Workspace | OpenRouter": "聊天 | 工作区 | OpenRouter",
     "Observability | OpenRouter": "可观测性 | OpenRouter",
-    "Workspace settings | OpenRouter": "工作区设置 | OpenRouter"
+    "Workspace settings | OpenRouter": "工作区设置 | OpenRouter",
+    "Vertex endpoints require Safety Retention. AI Studio endpoints will be disabled.": "Vertex 端点需要 Safety Retention。AI Studio 端点将被禁用。",
+    "Through OpenRouter: every request served, with no outage": "通过 OpenRouter：每个请求都能得到处理，没有中断",
+    "The open-source AI coding agent": "开源 AI 编程智能体"
   }
 }

@@ -236,7 +236,7 @@
 
   const SCRIPT_VERSION = "26.11.13";
   const ONLINE_MODE = false;
-  const DICTIONARY_REVISION = 2026111301;
+  const DICTIONARY_REVISION = 2026111302;
   // 本地版构建时注入完整快照；在线版为空对象，词典全部来自外置 JSON。
   const BUILTIN_DICTIONARY = {
   "Skip to content": "跳到内容",
@@ -2486,7 +2486,10 @@
   "AI Chat Playground - Compare AI Models Side by Side | OpenRouter": "AI 聊天演练场 - 并排对比 AI 模型 | OpenRouter",
   "Chat | Workspace | OpenRouter": "聊天 | 工作区 | OpenRouter",
   "Observability | OpenRouter": "可观测性 | OpenRouter",
-  "Workspace settings | OpenRouter": "工作区设置 | OpenRouter"
+  "Workspace settings | OpenRouter": "工作区设置 | OpenRouter",
+  "Vertex endpoints require Safety Retention. AI Studio endpoints will be disabled.": "Vertex 端点需要 Safety Retention。AI Studio 端点将被禁用。",
+  "Through OpenRouter: every request served, with no outage": "通过 OpenRouter：每个请求都能得到处理，没有中断",
+  "The open-source AI coding agent": "开源 AI 编程智能体"
 };
   let EXACT_TEXT = new Map(Object.entries(BUILTIN_DICTIONARY));
   let currentRevision = DICTIONARY_REVISION;

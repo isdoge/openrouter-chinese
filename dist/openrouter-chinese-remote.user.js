@@ -241,7 +241,7 @@
 
   const SCRIPT_VERSION = "1.0.4";
   const ONLINE_MODE = true;
-  const DICTIONARY_REVISION = 2026111301;
+  const DICTIONARY_REVISION = 2026111302;
   // 本地版构建时注入完整快照；在线版为空对象，词典全部来自外置 JSON。
   const BUILTIN_DICTIONARY = {};
   let EXACT_TEXT = new Map(Object.entries(BUILTIN_DICTIONARY));
