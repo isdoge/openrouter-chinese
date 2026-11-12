@@ -1,6 +1,6 @@
 # 词典格式、更新与维护合同
 
-本文对应 **OpenRouter 中文化插件**当前版本。源词典共 **1957 条**，`dictionaryRevision = 2026101002`，本地版日期版本 `26.10.10`。
+本文对应 **OpenRouter 中文化插件**当前版本。源词典共 **2248 条**，`dictionaryRevision = 2026111301`，本地版日期版本 `26.11.13`。
 
 [返回项目说明](../README.md)｜[本地版](../legacy/README.md)
 
@@ -47,7 +47,7 @@
 }
 ```
 
-上例只有两条，用于解释字段，**不是本次发布快照**；生成文件的 `entries` 应与实际 `dictionary` 的键数一致（当前 `1957`）。使用本次 revision 却配上不同内容，会被同 revision 异内容保护拒绝。
+上例只有两条，用于解释字段，**不是本次发布快照**；生成文件的 `entries` 应与实际 `dictionary` 的键数一致（当前 `2248`）。使用本次 revision 却配上不同内容，会被同 revision 异内容保护拒绝。
 
 | 字段 | 含义 |
 | --- | --- |
@@ -64,8 +64,8 @@ JSON 必须作为数据解析与校验，不使用 `eval` 或其他执行方式�
 
 | 位置 | 本次值 | 维护对象 |
 | --- | --- | --- |
-| `package.json.version` | `1.0.1` | 在线版脚本的功能／引擎版本；**只在脚本源码变化时递增** |
-| `release.config.json.dictionaryRevision` | `2026101002` | 词典内容版本，单调递增；本地版日期版本由它派生（如 `2026101002` → `26.10.10`） |
+| `package.json.version` | `1.0.4` | 在线版脚本的功能／引擎版本；**只在脚本源码变化时递增** |
+| `release.config.json.dictionaryRevision` | `2026111301` | 词典内容版本，单调递增；本地版日期版本由它派生（如 `2026111301` → `26.11.13`） |
 
 `release.config.json.dictionarySha256` 记录源词典内容指纹，不是第三种版本号。词典实际变化后，显式运行 `npm run dictionary:bump`，递增 revision 并更新指纹；词典未变化时不需要运行该命令。**`build` 不得自动提升或改写版本字段**；词典变化却未执行 bump 时应报错。
 
@@ -127,7 +127,7 @@ JSON 必须作为数据解析与校验，不使用 `eval` 或其他执行方式�
 
 1. 确认待补的英文原文与页面位置，避免将动态账号值、敏感信息或标识符当成词条。
 2. 只在 `locales/zh-CN.json` 增补或修正词条，保持 plain object；需要运行时行为变更时才修改唯一引擎模板。
-3. 词典实际变化后，显式运行 `npm run dictionary:bump`，提高 `dictionaryRevision` 并更新 `dictionarySha256`。本次基线为 `2026101002`，后续内容变化不得继续复用该 revision。
+3. 词典实际变化后，显式运行 `npm run dictionary:bump`，提高 `dictionaryRevision` 并更新 `dictionarySha256`。本次基线为 `2026111301`，后续内容变化不得继续复用该 revision。
 4. 脚本源码有功能／引擎变化时，递增 `package.json.version`（在线版），再运行：
 
    ```sh

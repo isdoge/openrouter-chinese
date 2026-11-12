@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         OpenRouter 中文化插件
 // @namespace    https://github.com/isdoge/openrouter-chinese/remote-dictionary-preview
-// @version      1.0.3
+// @version      1.0.4
 // @description  中文化 OpenRouter 界面，内置完整词典，支持缓存与多源在线更新
 // @author       狗带带子
 // @icon         https://ts2.tc.mm.bing.net/th/id/ODF.l3ZEv6Gwma3We2rLiXcGSw?w=32&h=32&qlt=90&pcl=fffffa&o=6&pid=1.2
@@ -98,12 +98,34 @@
     [/^Learn more about session tracking in our (?:(.+))?$/, (match, tail) => "关于会话追踪的更多说明见我们的" + (tail ? " " + tail : "")],
     [/^Classifiers \| OpenRouter$/, "分类器 | OpenRouter"],
     [/^New Classifier \| OpenRouter$/, "新建分类器 | OpenRouter"],
+    [/^Privacy settings \| OpenRouter$/, "隐私设置 | OpenRouter"],
+    [/^Workspace settings \| OpenRouter$/, "工作区设置 | OpenRouter"],
+    [/^Management keys \| OpenRouter$/, "管理密钥 | OpenRouter"],
+    [/^Notifications \| OpenRouter$/, "通知 | OpenRouter"],
+    [/^Manage plan \| OpenRouter$/, "管理套餐 | OpenRouter"],
+    [/^Account \| OpenRouter$/, "账号 | OpenRouter"],
+    [/^Workspaces \| OpenRouter$/, "工作区 | OpenRouter"],
+    [/^Observability \| OpenRouter$/, "可观测性 | OpenRouter"],
+    [/^Files \| Workspace \| OpenRouter$/, "文件 | 工作区 | OpenRouter"],
+    [/^Chat \| Workspace \| OpenRouter$/, "聊天 | 工作区 | OpenRouter"],
+    [/^Keys \| Settings \| OpenRouter$/, "密钥 | 设置 | OpenRouter"],
+    [/^Keys \| 设置 \| OpenRouter$/, "密钥 | 设置 | OpenRouter"],
+    [/^Tools \| Settings \| OpenRouter$/, "工具 | 设置 | OpenRouter"],
+    [/^Tools \| 设置 \| OpenRouter$/, "工具 | 设置 | OpenRouter"],
+    [/^Bring Your Own Key \(BYOK\) \| Settings \| OpenRouter$/, "自带密钥（BYOK） | 设置 | OpenRouter"],
+    [/^Bring Your Own Key \(BYOK\) \| 设置 \| OpenRouter$/, "自带密钥（BYOK） | 设置 | OpenRouter"],
+    [/^Model Fusion \| OpenRouter$/, "模型融合 | OpenRouter"],
+    [/^Labs - Experimental Features \| OpenRouter$/, "实验室 - 实验性功能 | OpenRouter"],
+    [/^AI Model Benchmarks \| OpenRouter$/, "AI 模型基准测试 | OpenRouter"],
+    [/^AI Model Comparison \| OpenRouter$/, "AI 模型对比 | OpenRouter"],
+    [/^Compare AI Models: Pricing, Context & Benchmarks \| OpenRouter$/, "对比 AI 模型：定价、上下文与基准测试 | OpenRouter"],
+    [/^AI Chat Playground - Compare AI Models Side by Side \| OpenRouter$/, "AI 聊天演练场 - 并排对比 AI 模型 | OpenRouter"],
     [/^(.+) \| Settings \| OpenRouter$/, "$1 | 设置 | OpenRouter"],
     [/^Security \| OpenRouter$/, "安全 | OpenRouter"],
     [/^Default (.+)$/, "默认 $1"],
     [/^Short (.+)$/, "短格式 $1"],
     [/^ISO (.+)$/, "ISO $1"],
-    [/^Relative (.+)$/, "相对时间 $1"],
+    [/^Relative (.+)$/, (match, tail) => "相对时间 " + translate(tail)],
     [/^Select all keys$/, "选择全部密钥"],
     [/^Select (.+)$/, "选择 $1"],
     [/^Tools: (\d+) active$/, "工具：$1 个已启用"],
@@ -133,6 +155,9 @@
     [/^\$(.+)\s+\/M output Token$/, "$$$1 / 百万输出 Token"],
     [/^from \$(.+) per second$/, "每秒 $$$1 起"],
     [/^from \$(.+) per image$/, "每张图 $$$1 起"],
+    [/^from \$(.+)\/image$/, "每张图 $$$1 起"],
+    [/^from \$(.+)\/second$/, "每秒 $$$1 起"],
+    [/^from \$(.+)\/megapixel-second$/, "每百万像素秒 $$$1 起"],
     [/^\$(.+) per minute$/, "每分钟 $$$1"],
     [/^\$(.+) per image$/, "每张图 $$$1"],
     [/^\$(.+) per 1M characters$/, "每 100 万字符 $$$1"],
@@ -163,6 +188,11 @@
     [/^(\d+)d ago$/, "$1 天前"],
     [/^(\d+)h ago$/, "$1 小时前"],
     [/^(\d+)y ago$/, "$1 年前"],
+    [/^(\d+) months? ago$/, "$1 个月前"],
+    [/^(\d+) weeks? ago$/, "$1 周前"],
+    [/^(\d+) days? ago$/, "$1 天前"],
+    [/^(\d+) hours? ago$/, "$1 小时前"],
+    [/^(\d+) years? ago$/, "$1 年前"],
     [/^(\d+)mo$/, "$1 个月"],
     [/^([\d.,]+) t\/s$/, "$1 Token/秒"],
     [/^([\d.,]+)ms$/, "$1 毫秒"],
@@ -196,12 +226,22 @@
     [/^Ranked at #(\d+) in (.+) category$/, (match, rank, cat) => `在${translate(cat)}分类中排名第 ${rank}`],
     // 转录页：字符数计价
     [/^(\$[\d.,]+)\/M characters$/, "$1/百万字符"],
+    // 2026-11-13 补漏：相对时间完整写法、页面地标、定价斜杠写法之外的动态文案
+    [/^Pages: (.+)$/, (match, name) => "页面：" + translate(name)],
+    [/^Open (.+) details$/, "打开 $1 详情"],
+    [/^Seek to (\d+)%$/, "定位到 $1%"],
+    [/^(\d+) of (\d+) workspaces? in use\. Business raises the cap to ([\d,]+)\.$/, "已使用 $1 / $2 个工作区。商务版将上限提升至 $3 个。"],
+    [/^Model availability · (\d+) models? listed$/, "模型可用性 · 已列出 $1 个模型"],
+    [/^(\d+) models? allowed · (\d+) providers? allowed$/, "允许 $1 个模型 · 允许 $2 个提供商"],
+    [/^Updated (\d{2}\/\d{2}\/\d{4})$/, "更新于 $1"],
+    [/^Top-up platform fee (.+)\.$/, "充值平台手续费 $1。"],
+    [/^(.+): up except for one outage; while it is down, requests go to another provider$/, "$1：除一次故障外均正常；故障期间请求会转到其他提供商"],
   ];
 
 
-  const SCRIPT_VERSION = "1.0.3";
+  const SCRIPT_VERSION = "1.0.4";
   const ONLINE_MODE = true;
-  const DICTIONARY_REVISION = 2026101004;
+  const DICTIONARY_REVISION = 2026111301;
   // 本地版构建时注入完整快照；在线版为空对象，词典全部来自外置 JSON。
   const BUILTIN_DICTIONARY = {};
   let EXACT_TEXT = new Map(Object.entries(BUILTIN_DICTIONARY));
@@ -223,7 +263,7 @@
   const DICTIONARY_SOURCES = [
     "https://raw.githubusercontent.com/isdoge/openrouter-chinese/main/locales/zh-CN.online.json",
     "https://cdn.jsdelivr.net/gh/isdoge/openrouter-chinese@main/locales/zh-CN.online.json",
-    "https://raw.githubusercontent.com/isdoge/openrouter-chinese/v1.0.3/locales/zh-CN.online.json",
+    "https://raw.githubusercontent.com/isdoge/openrouter-chinese/v1.0.4/locales/zh-CN.online.json",
   ];
   const DICTIONARY_CACHE_KEY = "openrouter-zh-remote-dictionary-v1";
   const DICTIONARY_MAX_BYTES = 800_000;
